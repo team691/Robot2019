@@ -1,13 +1,44 @@
 package frc.team691.robot2019;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class OI {
-    Joystick stick;
+    private static OI instance;
 
-    public OI() {
-        stick = new Joystick(0);
+    public static synchronized OI getInstance() {
+        if (instance == null) {
+            instance = new OI();
+        }
+        return instance;
     }
+
+    private Joystick[] sticks;
+
+    private OI() {
+        updateSticks();
+    }
+
+    public Joystick getStick(int i) {
+        return sticks[i];
+    }
+
+    public int getNumSticks() {
+        return sticks.length;
+    }
+    
+    int updateSticks() {
+        int i;
+        for (i = 0; DriverStation.getInstance().getJoystickType(i) != 0 && i < 5; i++);
+        if (sticks == null || sticks.length != i) {
+            sticks = new Joystick[i];
+            for (i = 0; i < sticks.length; i++) {
+                sticks[i] = new Joystick(i);
+            }
+        }
+        return i;
+    }
+
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a
     //// joystick.
