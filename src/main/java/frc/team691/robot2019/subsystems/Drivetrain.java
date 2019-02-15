@@ -17,11 +17,11 @@ public class Drivetrain extends Subsystem {
         return instance;
     }
 
-    WPI_TalonSRX frontLeftTalon;
-    WPI_TalonSRX rearLeftTalon;
-    WPI_TalonSRX frontRightTalon;
-    WPI_TalonSRX rearRightTalon;
-    MecanumDrive mecDrive;
+    private WPI_TalonSRX frontLeftTalon;
+    private WPI_TalonSRX rearLeftTalon;
+    private WPI_TalonSRX frontRightTalon;
+    private WPI_TalonSRX rearRightTalon;
+    private MecanumDrive mecDrive;
 
     private Drivetrain() {
         frontLeftTalon = new WPI_TalonSRX(0);

@@ -3,6 +3,7 @@ package frc.team691.robot2019;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team691.robot2019.subsystems.BallArm;
 import frc.team691.robot2019.subsystems.Drivetrain;
 
 public class Robot extends TimedRobot {
@@ -11,7 +12,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        Drivetrain.getInstance();
+        //Drivetrain.getInstance();
+        BallArm.getInstance();
         oi = OI.getInstance();
     }
 
