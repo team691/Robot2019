@@ -1,11 +1,13 @@
 package frc.team691.robot2019.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.Drivetrain;
 
 public class StickDrive extends Command {
     private static final int STICK_PORT = 0;
+    private static final int BUTTON_GYRO_RESET = 11;
 
     private static StickDrive instance;
 
@@ -34,7 +36,11 @@ public class StickDrive extends Command {
     @Override
     protected void execute() {
         if (oi.getNumSticks() > STICK_PORT) {
-            dt.driveStick(oi.getStick(STICK_PORT));
+            Joystick stick = oi.getStick(STICK_PORT);
+            dt.driveStick(stick);
+            if (stick.getRawButtonPressed(BUTTON_GYRO_RESET)) {
+                dt.resetGyro();
+            }
         } else {
             dt.driveStop();
         }

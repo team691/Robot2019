@@ -2,6 +2,7 @@ package frc.team691.robot2019.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -23,6 +24,7 @@ public class Drivetrain extends Subsystem {
         return instance;
     }
 
+    private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     private WPI_TalonSRX frontLeftTalon;
     private WPI_TalonSRX rearLeftTalon;
     private WPI_TalonSRX frontRightTalon;
@@ -50,10 +52,15 @@ public class Drivetrain extends Subsystem {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("gyro", gyro.getAngle());
         MOTOR_MIN_OUT = SmartDashboard.getNumber("MOTOR_MIN_OUT", MOTOR_MIN_OUT);
         MOTOR_MAX_OUT = SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT);
         K_LOG =         SmartDashboard.getNumber("K_LOG", K_LOG);
         X_MID =         SmartDashboard.getNumber("X_MID", X_MID);
+    }
+
+    public void resetGyro() {
+        gyro.reset();
     }
 
     public void driveStop() {
@@ -61,7 +68,7 @@ public class Drivetrain extends Subsystem {
     }
 
     public void driveStick(Joystick stick) {
-        mecDrive.driveCartesian(stick.getX(), -stick.getY(), 0);
+        mecDrive.driveCartesian(stick.getX(), stick.getY(), stick.getZ(), gyro.getAngle());
         //mecDrive.driveCartesian(logisticScale(lostick.getX()),
         //    logisticScale(-stick.getY()), 0);
     }
