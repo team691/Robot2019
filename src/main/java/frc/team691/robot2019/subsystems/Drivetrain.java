@@ -12,8 +12,8 @@ import frc.team691.robot2019.commands.StickDrive;
 public class Drivetrain extends Subsystem {
     private static double MOTOR_MIN_OUT = 0.1;
     private static double MOTOR_MAX_OUT = 0.8;
-    private static double K_LOG = 10;
-    private static double X_MID = 0.5;
+    private static double K_LOG         = 10;
+    private static double X_MID         = 0.5;
 
     private static Drivetrain instance;
 
@@ -24,21 +24,17 @@ public class Drivetrain extends Subsystem {
         return instance;
     }
 
-    private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-    private WPI_TalonSRX frontLeftTalon;
-    private WPI_TalonSRX rearLeftTalon;
-    private WPI_TalonSRX frontRightTalon;
-    private WPI_TalonSRX rearRightTalon;
-    private MecanumDrive mecDrive;
+    private boolean isFieldDrive = true;
+
+    private ADXRS450_Gyro gyro              = new ADXRS450_Gyro();
+    private WPI_TalonSRX frontLeftTalon     = new WPI_TalonSRX(1);
+    private WPI_TalonSRX rearLeftTalon      = new WPI_TalonSRX(0);
+    private WPI_TalonSRX frontRightTalon    = new WPI_TalonSRX(3);
+    private WPI_TalonSRX rearRightTalon     = new WPI_TalonSRX(2);
+    private MecanumDrive mecDrive = new MecanumDrive(frontLeftTalon,
+                    rearLeftTalon, frontRightTalon, rearRightTalon);
 
     private Drivetrain() {
-        frontLeftTalon = new WPI_TalonSRX(1);
-        rearLeftTalon = new WPI_TalonSRX(0);
-        frontRightTalon = new WPI_TalonSRX(3);
-        rearRightTalon = new WPI_TalonSRX(2);
-        mecDrive = new MecanumDrive(frontLeftTalon, rearLeftTalon,
-            frontRightTalon, rearRightTalon);
-
         SmartDashboard.putNumber("MOTOR_MIN_OUT",   SmartDashboard.getNumber("MOTOR_MIN_OUT", MOTOR_MIN_OUT));
         SmartDashboard.putNumber("MOTOR_MAX_OUT",   SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT));
         SmartDashboard.putNumber("K_LOG",           SmartDashboard.getNumber("K_LOG", K_LOG));
@@ -47,16 +43,21 @@ public class Drivetrain extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(StickDrive.getInstance());
+        setDefaultCommand(new StickDrive());
     }
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("isFieldDrive", isFieldDrive);
         SmartDashboard.putNumber("gyro", gyro.getAngle());
-        MOTOR_MIN_OUT = SmartDashboard.getNumber("MOTOR_MIN_OUT", MOTOR_MIN_OUT);
-        MOTOR_MAX_OUT = SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT);
-        K_LOG =         SmartDashboard.getNumber("K_LOG", K_LOG);
-        X_MID =         SmartDashboard.getNumber("X_MID", X_MID);
+        MOTOR_MIN_OUT   = SmartDashboard.getNumber("MOTOR_MIN_OUT", MOTOR_MIN_OUT);
+        MOTOR_MAX_OUT   = SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT);
+        K_LOG           = SmartDashboard.getNumber("K_LOG", K_LOG);
+        X_MID           = SmartDashboard.getNumber("X_MID", X_MID);
+    }
+
+    public void toggleFieldDrive() {
+        isFieldDrive = !isFieldDrive;
     }
 
     public void resetGyro() {
@@ -68,9 +69,12 @@ public class Drivetrain extends Subsystem {
     }
 
     public void driveStick(Joystick stick) {
-        mecDrive.driveCartesian(stick.getX(), stick.getY(), stick.getZ(), gyro.getAngle());
-        //mecDrive.driveCartesian(logisticScale(lostick.getX()),
-        //    logisticScale(-stick.getY()), 0);
+        double yOut = logisticScale(stick.getX());
+        double xOut = logisticScale(stick.getY());
+        double zOut = logisticScale(stick.getZ());
+        double gAngle = (isFieldDrive ? gyro.getAngle() : 0);
+        //mecDrive.driveCartesian(stick.getX(), stick.getY(), stick.getZ(), gAngle);
+        mecDrive.driveCartesian(yOut, xOut, zOut, gAngle);
     }
 
     private double logisticScale(double x) {

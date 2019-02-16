@@ -20,7 +20,7 @@ public class OI {
     }
 
     public Joystick getStick(int i) {
-        return sticks[i];
+        return (i < sticks.length ? sticks[i] : null);
     }
 
     public int getNumSticks() {
