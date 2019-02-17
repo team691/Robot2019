@@ -2,16 +2,15 @@ package frc.team691.robot2019;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import frc.team691.robot2019.subsystems.Drivetrain;
+import frc.team691.robot2019.subsystems.*;
 
 public class Robot extends TimedRobot {
-    //private Drivetrain dt;
     private OI oi;
 
     @Override
     public void robotInit() {
-        //dt = Drivetrain.getInstance();
         Drivetrain.getInstance();
+        DiscElevator.getInstance();
         oi = OI.getInstance();
     }
 

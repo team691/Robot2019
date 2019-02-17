@@ -22,7 +22,7 @@ public class Drivetrain extends Subsystem {
     private WPI_TalonSRX frontRightTalon    = new WPI_TalonSRX(3);
     private WPI_TalonSRX rearRightTalon     = new WPI_TalonSRX(2);
     private MecanumDrive mecDrive = new MecanumDrive(frontLeftTalon,
-    rearLeftTalon, frontRightTalon, rearRightTalon);
+        rearLeftTalon, frontRightTalon, rearRightTalon);
     
     private boolean isFieldDrive = false;
 
@@ -93,7 +93,7 @@ public class Drivetrain extends Subsystem {
             (1 + Math.exp(K_LOG * (X_MID - ax))) + MOTOR_MIN_OUT;
         return Math.copySign(y, x);
     }
-    
+
     private static Drivetrain instance;
     public static synchronized Drivetrain getInstance() {
         if (instance == null) {

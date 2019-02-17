@@ -31,11 +31,13 @@ public class StickGrab extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        arm.driveStop();
     }
     
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }
