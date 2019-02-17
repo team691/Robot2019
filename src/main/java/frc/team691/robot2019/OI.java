@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class OI {
     private static OI instance;
-
     public static synchronized OI getInstance() {
         if (instance == null) {
             instance = new OI();

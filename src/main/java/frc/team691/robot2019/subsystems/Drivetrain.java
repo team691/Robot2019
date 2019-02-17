@@ -9,7 +9,6 @@ import frc.team691.robot2019.commands.StickDrive;
 
 public class Drivetrain extends Subsystem {
     private static Drivetrain instance;
-
     public static synchronized Drivetrain getInstance() {
         if (instance == null) {
             instance = new Drivetrain();

@@ -1,20 +1,15 @@
 package frc.team691.robot2019.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team691.robot2019.OI;
-import frc.team691.robot2019.subsystems.BallArm;
+import frc.team691.robot2019.subsystems.DiscElevator;
 
-public class StickArm extends Command {
-    private static final int STICK_PORT = 0;
+public class StickElevate extends Command {
+    private OI oi               = OI.getInstance();
+    private DiscElevator elev   = DiscElevator.getInstance();
 
-    OI oi;
-    BallArm arm;
-
-    public StickArm() {
-        oi = OI.getInstance();
-        arm = BallArm.getInstance();
-        requires(arm);
+    public StickElevate() {
+        requires(elev);
     }
     
     // Called just before this Command runs the first time
@@ -25,14 +20,6 @@ public class StickArm extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Joystick stick = oi.getStick(STICK_PORT);
-        if (stick == null) {
-            arm.driveStop();
-        } else if (stick.getTrigger()) {
-            arm.driveHold();
-        } else {
-            arm.driveStick(stick);
-        }
     }
     
     // Make this return true when this Command no longer needs to run execute()

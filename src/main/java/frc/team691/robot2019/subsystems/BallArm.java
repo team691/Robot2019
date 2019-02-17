@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team691.robot2019.commands.StickArm;
+import frc.team691.robot2019.commands.StickGrab;
 
 public class BallArm extends Subsystem {
     private static double MOTOR_LOWER_MAX_OUT = 1;
@@ -13,7 +13,6 @@ public class BallArm extends Subsystem {
     private static double MOTOR_HOLD_OUT = 0.2;
 
     private static BallArm instance;
-
     public static synchronized BallArm getInstance() {
         if (instance == null) {
             instance = new BallArm();
@@ -38,7 +37,7 @@ public class BallArm extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new StickArm());
+        setDefaultCommand(new StickGrab());
     }
 
     @Override
