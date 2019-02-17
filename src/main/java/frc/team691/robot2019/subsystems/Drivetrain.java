@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.commands.StickDrive;
 
 public class Drivetrain extends Subsystem {
-    private static double MOTOR_MIN_OUT = 0.1;
-    private static double MOTOR_MAX_OUT = 0.8;
+    private static double MOTOR_MIN_OUT = 0.0;
+    private static double MOTOR_MAX_OUT = 0.6;
     private static double K_LOG         = 10;
     private static double X_MID         = 0.5;
 
@@ -22,7 +22,7 @@ public class Drivetrain extends Subsystem {
         return instance;
     }
 
-    private boolean isFieldDrive = true;
+    private boolean isFieldDrive = false;
 
     private ADXRS450_Gyro gyro              = new ADXRS450_Gyro();
     private WPI_TalonSRX frontLeftTalon     = new WPI_TalonSRX(1);
@@ -66,6 +66,7 @@ public class Drivetrain extends Subsystem {
         mecDrive.stopMotor();
     }
 
+    // Requires stick type 20
     public void driveStick(Joystick stick) {
         double yOut = logisticScale(stick.getX());
         double xOut = logisticScale(stick.getY());

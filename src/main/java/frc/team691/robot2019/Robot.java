@@ -39,8 +39,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        // TODO: find better way to reset dt
-        dt.resetGyro();
         oi.updateSticks();
         SmartDashboard.putNumber("numSticks", oi.getNumSticks());
     }

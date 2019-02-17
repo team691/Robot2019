@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class OI {
+    public static final int STICK_TYPE_X3D = 20;
+    
     private static OI instance;
     public static synchronized OI getInstance() {
         if (instance == null) {
@@ -13,6 +15,7 @@ public class OI {
     }
 
     private Joystick[] sticks;
+    private int[] stickTypes;
 
     private OI() {
         updateSticks();
@@ -22,12 +25,17 @@ public class OI {
         return (i < sticks.length ? sticks[i] : null);
     }
 
+    // Get stick only of given type
+    public Joystick getStick(int i, int type) {
+        return (getStickType(i) == type ? getStick(i) : null);
+    }
+
     public int getNumSticks() {
         return sticks.length;
     }
 
     public int getStickType(int i) {
-        return (i < sticks.length ? DriverStation.getInstance().getJoystickType(i) : 0);
+        return (i < sticks.length ? stickTypes[i] : 0);
     }
     
     int updateSticks() {
@@ -36,8 +44,11 @@ public class OI {
         for (i = 0; ds.getJoystickType(i) != 0 && i < DriverStation.kJoystickPorts; i++);
         if (sticks == null || sticks.length != i) {
             sticks = new Joystick[i];
+            stickTypes = new int[i];
             for (i = 0; i < sticks.length; i++) {
                 sticks[i] = new Joystick(i);
+                stickTypes[i] = ds.getJoystickType(i);
+                System.out.format("s%d: %d\n", i, stickTypes[i]);
             }
         }
         return i;
