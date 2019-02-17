@@ -26,10 +26,15 @@ public class OI {
     public int getNumSticks() {
         return sticks.length;
     }
+
+    public int getStickType(int i) {
+        return (i < sticks.length ? DriverStation.getInstance().getJoystickType(i) : 0);
+    }
     
     int updateSticks() {
         int i;
-        for (i = 0; DriverStation.getInstance().getJoystickType(i) != 0 && i < 5; i++);
+        DriverStation ds = DriverStation.getInstance();
+        for (i = 0; ds.getJoystickType(i) != 0 && i < DriverStation.kJoystickPorts; i++);
         if (sticks == null || sticks.length != i) {
             sticks = new Joystick[i];
             for (i = 0; i < sticks.length; i++) {

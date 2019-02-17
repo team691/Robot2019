@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.subsystems.Drivetrain;
 
 public class Robot extends TimedRobot {
-    //private Drivetrain drivetrain;
+    private Drivetrain dt;
     private OI oi;
 
     @Override
     public void robotInit() {
-        Drivetrain.getInstance();
+        dt = Drivetrain.getInstance();
         oi = OI.getInstance();
     }
 
@@ -39,6 +39,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        // TODO: find better way to reset dt
+        dt.resetGyro();
         oi.updateSticks();
         SmartDashboard.putNumber("numSticks", oi.getNumSticks());
     }
