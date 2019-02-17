@@ -15,7 +15,6 @@ public class Drivetrain extends Subsystem {
     private static double X_MID         = 0.5;
 
     private static Drivetrain instance;
-
     public static synchronized Drivetrain getInstance() {
         if (instance == null) {
             instance = new Drivetrain();
