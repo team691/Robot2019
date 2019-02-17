@@ -2,7 +2,9 @@ package frc.team691.robot2019.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,19 +12,9 @@ import frc.team691.robot2019.commands.StickDrive;
 
 public class Drivetrain extends Subsystem {
     private static double MOTOR_MIN_OUT = 0.0;
-    private static double MOTOR_MAX_OUT = 0.6;
+    private static double MOTOR_MAX_OUT = 0.8;
     private static double K_LOG         = 10;
     private static double X_MID         = 0.5;
-
-    private static Drivetrain instance;
-    public static synchronized Drivetrain getInstance() {
-        if (instance == null) {
-            instance = new Drivetrain();
-        }
-        return instance;
-    }
-
-    private boolean isFieldDrive = false;
 
     private ADXRS450_Gyro gyro              = new ADXRS450_Gyro();
     private WPI_TalonSRX frontLeftTalon     = new WPI_TalonSRX(1);
@@ -30,7 +22,9 @@ public class Drivetrain extends Subsystem {
     private WPI_TalonSRX frontRightTalon    = new WPI_TalonSRX(3);
     private WPI_TalonSRX rearRightTalon     = new WPI_TalonSRX(2);
     private MecanumDrive mecDrive = new MecanumDrive(frontLeftTalon,
-                    rearLeftTalon, frontRightTalon, rearRightTalon);
+    rearLeftTalon, frontRightTalon, rearRightTalon);
+    
+    private boolean isFieldDrive = false;
 
     private Drivetrain() {
         SmartDashboard.putNumber("MOTOR_MIN_OUT",   SmartDashboard.getNumber("MOTOR_MIN_OUT", MOTOR_MIN_OUT));
@@ -58,7 +52,7 @@ public class Drivetrain extends Subsystem {
         isFieldDrive = !isFieldDrive;
     }
 
-    public void resetGyro() {
+    public void resetFieldDrive() {
         gyro.reset();
     }
 
@@ -66,13 +60,30 @@ public class Drivetrain extends Subsystem {
         mecDrive.stopMotor();
     }
 
-    // Requires stick type 20
+    public void driveXbox(XboxController xbox) {
+        double yOut = xbox.getX(Hand.kLeft);
+        double xOut = xbox.getY(Hand.kLeft);
+        double zOut = xbox.getX(Hand.kRight);
+        driveLogistic(yOut, xOut, zOut);
+    }
+
+    // Requires stick type X3D
     public void driveStick(Joystick stick) {
-        double yOut = logisticScale(stick.getX());
-        double xOut = logisticScale(stick.getY());
-        double zOut = logisticScale(stick.getZ());
+        double yOut = stick.getX();
+        double xOut = stick.getY();
+        double zOut = stick.getZ();
+        driveLogistic(yOut, xOut, zOut);
+    }
+
+    public void driveLogistic(double yOut, double xOut, double zOut) {
+        yOut = logisticScale(yOut);
+        xOut = logisticScale(xOut);
+        zOut = logisticScale(zOut);
+        drive(yOut, xOut, zOut);
+    }
+
+    public void drive(double yOut, double xOut, double zOut) {
         double gAngle = (isFieldDrive ? gyro.getAngle() : 0);
-        //mecDrive.driveCartesian(stick.getX(), stick.getY(), stick.getZ(), gAngle);
         mecDrive.driveCartesian(yOut, xOut, zOut, gAngle);
     }
 
@@ -81,5 +92,13 @@ public class Drivetrain extends Subsystem {
         double y = (MOTOR_MAX_OUT - MOTOR_MIN_OUT) /
             (1 + Math.exp(K_LOG * (X_MID - ax))) + MOTOR_MIN_OUT;
         return Math.copySign(y, x);
+    }
+    
+    private static Drivetrain instance;
+    public static synchronized Drivetrain getInstance() {
+        if (instance == null) {
+            instance = new Drivetrain();
+        }
+        return instance;
     }
 }

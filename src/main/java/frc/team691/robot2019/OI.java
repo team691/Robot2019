@@ -1,20 +1,25 @@
 package frc.team691.robot2019;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
-    public static final int STICK_TYPE_X3D = 20;
-    
-    private static OI instance;
-    public static synchronized OI getInstance() {
-        if (instance == null) {
-            instance = new OI();
-        }
-        return instance;
-    }
+    public static final int XBOX_BUTTON_X = 1;
+    public static final int XBOX_BUTTON_Y = 4;
+    public static final int XBOX_BUTTON_A = 2;
+    public static final int XBOX_BUTTON_B = 3;
+    public static final int XBOX_BUTTON_BACK = 9;
+    public static final int XBOX_BUTTON_START = 10;
+    // DS USB ports with XboxControllers
+    private static final boolean[] XBOX_PORTS = new boolean[] {
+        true
+    };
 
-    private Joystick[] sticks;
+    //private Joystick[] sticks;
+    private GenericHID[] hids;
     private int[] stickTypes;
 
     private OI() {
@@ -22,9 +27,21 @@ public class OI {
     }
 
     public Joystick getStick(int i) {
-        return (i < sticks.length ? sticks[i] : null);
+        //return (i < sticks.length ? sticks[i] : null);
+        if (i < hids.length && (i >= XBOX_PORTS.length || !XBOX_PORTS[i])) {
+            return (Joystick) hids[i];
+        }
+        return null;
     }
 
+    public XboxController getXbox(int i) {
+        if (i < XBOX_PORTS.length && XBOX_PORTS[i] && i < hids.length) {
+            return (XboxController) hids[i];
+        }
+        return null;
+    }
+
+    /*
     // Get stick only of given type
     public Joystick getStick(int i, int type) {
         return (getStickType(i) == type ? getStick(i) : null);
@@ -33,27 +50,40 @@ public class OI {
     public int getNumSticks() {
         return sticks.length;
     }
+    */
 
     public int getStickType(int i) {
-        return (i < sticks.length ? stickTypes[i] : 0);
+        return (i < stickTypes.length ? stickTypes[i] : 0);
     }
     
     int updateSticks() {
         int i;
         DriverStation ds = DriverStation.getInstance();
         for (i = 0; ds.getJoystickType(i) != 0 && i < DriverStation.kJoystickPorts; i++);
-        if (sticks == null || sticks.length != i) {
-            sticks = new Joystick[i];
+        //if (sticks == null || sticks.length != i) {
+        if (hids == null || hids.length != i) {
+            //sticks = new Joystick[i];
             stickTypes = new int[i];
-            for (i = 0; i < sticks.length; i++) {
-                sticks[i] = new Joystick(i);
+            hids = new GenericHID[i];
+            for (i = 0; i < hids.length; i++) {
+                //sticks[i] = new Joystick(i);
                 stickTypes[i] = ds.getJoystickType(i);
+                hids[i] = (i < XBOX_PORTS.length && XBOX_PORTS[i] ?
+                    new XboxController(i) : new Joystick(i));
                 System.out.format("s%d: %d\n", i, stickTypes[i]);
             }
         }
+        SmartDashboard.putNumber("numHIDs", i);
         return i;
     }
-
+    
+    private static OI instance;
+    public static synchronized OI getInstance() {
+        if (instance == null) {
+            instance = new OI();
+        }
+        return instance;
+    }
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a
     //// joystick.
