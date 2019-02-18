@@ -13,21 +13,23 @@ public class OI {
     public static final int XBOX_BUTTON_B = 3;
     public static final int XBOX_BUTTON_BACK = 9;
     public static final int XBOX_BUTTON_START = 10;
+    public static final int XBOX_AXIS_LEFT_X = 0;
+    public static final int XBOX_AXIS_LEFT_Y = 1;
+    public static final int XBOX_AXIS_RIGHT_X = 2;
+    public static final int XBOX_AXIS_RIGHT_Y = 3;
     // DS USB ports with XboxControllers
     private static final boolean[] XBOX_PORTS = new boolean[] {
         true
     };
 
     //private Joystick[] sticks;
-    private GenericHID[] hids;
-    private int[] stickTypes;
+    private GenericHID[] hids = new GenericHID[DriverStation.kJoystickPorts];
 
     private OI() {
         updateSticks();
     }
 
     public Joystick getStick(int i) {
-        //return (i < sticks.length ? sticks[i] : null);
         if (i < hids.length && (i >= XBOX_PORTS.length || !XBOX_PORTS[i])) {
             return (Joystick) hids[i];
         }
@@ -40,41 +42,23 @@ public class OI {
         }
         return null;
     }
-
-    /*
-    // Get stick only of given type
-    public Joystick getStick(int i, int type) {
-        return (getStickType(i) == type ? getStick(i) : null);
-    }
-
-    public int getNumSticks() {
-        return sticks.length;
-    }
-    */
-
-    public int getStickType(int i) {
-        return (i < stickTypes.length ? stickTypes[i] : 0);
-    }
     
     int updateSticks() {
-        int i;
+        int res = 0;
         DriverStation ds = DriverStation.getInstance();
-        for (i = 0; ds.getJoystickType(i) != 0 && i < DriverStation.kJoystickPorts; i++);
-        //if (sticks == null || sticks.length != i) {
-        if (hids == null || hids.length != i) {
-            //sticks = new Joystick[i];
-            stickTypes = new int[i];
-            hids = new GenericHID[i];
-            for (i = 0; i < hids.length; i++) {
-                //sticks[i] = new Joystick(i);
-                stickTypes[i] = ds.getJoystickType(i);
-                hids[i] = (i < XBOX_PORTS.length && XBOX_PORTS[i] ?
-                    new XboxController(i) : new Joystick(i));
-                System.out.format("s%d: %d\n", i, stickTypes[i]);
+        for (int i = 0; i < hids.length; i++) {
+            if (ds.getJoystickType(i) != 0) {
+                if (hids[i] == null) {
+                    hids[i] = (i < XBOX_PORTS.length && XBOX_PORTS[i] ?
+                        new XboxController(i) : new Joystick(i));
+                }
+                res++;
+            } else if (hids[i] != null) {
+                hids[i] = null;
             }
         }
-        SmartDashboard.putNumber("numHIDs", i);
-        return i;
+        SmartDashboard.putNumber("numHIDs", res);
+        return res;
     }
     
     private static OI instance;

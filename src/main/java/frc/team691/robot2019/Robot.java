@@ -9,8 +9,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        Drivetrain.getInstance();
         DiscElevator.getInstance();
+        Drivetrain.getInstance();
         oi = OI.getInstance();
     }
 
@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         Scheduler.getInstance().run();
+        
     }
 
     @Override

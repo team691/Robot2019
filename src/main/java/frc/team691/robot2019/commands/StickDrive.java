@@ -3,6 +3,7 @@ package frc.team691.robot2019.commands;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.Drivetrain;
 
@@ -15,14 +16,12 @@ public class StickDrive extends Command {
     private Drivetrain dt   = Drivetrain.getInstance();
 
     public StickDrive() {
-        System.out.println("sdrive construct");
         requires(dt);
     }
     
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        System.out.format("sdrive init\n");
         // TODO: Set field drive
         if (RobotState.isAutonomous()) {
             dt.resetFieldDrive();
@@ -38,10 +37,13 @@ public class StickDrive extends Command {
             return;
         }
         dt.driveXbox(xbox);
+        //dt.driveStop();
         if (xbox.getRawButtonPressed(BUTTON_RESET)) {
+            System.out.println("RESET");
             dt.resetFieldDrive();
         }
         if (xbox.getRawButtonPressed(BUTTON_FIELD_DRIVE)) {
+            System.out.println("FIELD_DRIVE");
             dt.toggleFieldDrive();
         }
     }
