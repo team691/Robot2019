@@ -65,36 +65,6 @@ public class DiscElevator extends Subsystem {
         motor.set(mout);
     }
 
-    /*
-    public void moveBottom(boolean up, boolean down) {
-        if (up) {
-            moveDirBottom(1);
-        } else if (down) {
-            moveDirBottom(-1);
-        } else {
-            moveDirBottom(0);
-        }
-    }
-
-    public void moveSide(boolean up, boolean down) {
-        if (up) {
-            moveDirSide(1);
-        } else if (down) {
-            moveDirSide(-1);
-        } else {
-            moveDirSide(0);
-        }
-    }
-
-    public void moveDirBottom(int dir) {
-        bottomMotor.set(dir * BOTTOM_MOTOR_OUT);
-    }
-
-    public void moveDirSide(int dir) {
-        sideMotor.set(dir * SIDE_MOTOR_OUT);
-    }
-    */
-
     public void grab() {
         if (grabber.get() == Value.kForward) {
             grabber.set(Value.kReverse);

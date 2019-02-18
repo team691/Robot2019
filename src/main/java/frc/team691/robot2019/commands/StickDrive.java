@@ -39,11 +39,9 @@ public class StickDrive extends Command {
         dt.driveXbox(xbox);
         //dt.driveStop();
         if (xbox.getRawButtonPressed(BUTTON_RESET)) {
-            System.out.println("RESET");
             dt.resetFieldDrive();
         }
         if (xbox.getRawButtonPressed(BUTTON_FIELD_DRIVE)) {
-            System.out.println("FIELD_DRIVE");
             dt.toggleFieldDrive();
         }
     }

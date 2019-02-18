@@ -41,22 +41,6 @@ public class StickElevate extends Command {
             stick.getRawButton(BUTTON_BOTTOM_DOWN),
             stick.getRawButton(BUTTON_SIDE_UP),
             stick.getRawButton(BUTTON_SIDE_DOWN));
-        /*
-        if (stick.getRawButton(BUTTON_BOTTOM_DOWN)) {
-            elev.moveDirBottom(-1);
-        } else if (stick.getRawButton(BUTTON_BOTTOM_UP)) {
-            elev.moveDirBottom(1);
-        } else {
-            elev.moveDirBottom(0);
-        }
-        if (stick.getRawButton(BUTTON_SIDE_DOWN)) {
-            elev.moveDirSide(-1);
-        } else if (stick.getRawButton(BUTTON_SIDE_UP)) {
-            elev.moveDirSide(1);
-        } else {
-            elev.moveDirSide(0);
-        }
-        */
     }
     
     // Make this return true when this Command no longer needs to run execute()
