@@ -1,17 +1,24 @@
 package frc.team691.robot2019;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.subsystems.*;
 
 public class Robot extends TimedRobot {
     private OI oi;
+    private UsbCamera webcam;
 
     @Override
     public void robotInit() {
+        // Construct subsystems in use
         Drivetrain.getInstance();
         DiscElevator.getInstance();
+        
         oi = OI.getInstance();
+        webcam = CameraServer.getInstance().startAutomaticCapture();
     }
 
     @Override
