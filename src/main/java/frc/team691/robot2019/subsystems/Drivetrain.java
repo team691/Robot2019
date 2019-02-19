@@ -2,9 +2,7 @@ package frc.team691.robot2019.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,7 +10,6 @@ import frc.team691.robot2019.OI;
 import frc.team691.robot2019.commands.StickDrive;
 
 public class Drivetrain extends Subsystem {
-    private static final double XBOX_MIN_IN = 0.1;
     private static final double MOTOR_MIN_OUT = 0.05;
     private static final double K_LOG = 10;
     private static final double X_MID = 0.5;
@@ -30,8 +27,10 @@ public class Drivetrain extends Subsystem {
     private boolean isFieldDrive = false;
 
     private Drivetrain() {
-        SmartDashboard.putNumber("MOTOR_MAX_OUT",   SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT));
-        SmartDashboard.putNumber("MEC_Y_MAX_OUT",   SmartDashboard.getNumber("MEC_Y_MAX_OUT", MEC_Y_MAX_OUT));
+        SmartDashboard.putNumber("MOTOR_MAX_OUT",
+            SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT));
+        SmartDashboard.putNumber("MEC_Y_MAX_OUT",
+            SmartDashboard.getNumber("MEC_Y_MAX_OUT", MEC_Y_MAX_OUT));
     }
 
     @Override
@@ -42,16 +41,22 @@ public class Drivetrain extends Subsystem {
     @Override
     public void periodic() {
         SmartDashboard.putString("talon", String.format("%f:%f:%f:%f",
-            rearLeftTalon.get(), frontLeftTalon.get(), rearRightTalon.get(),
-            frontRightTalon.get()));
+            rearLeftTalon.get(), frontLeftTalon.get(),
+            rearRightTalon.get(), frontRightTalon.get()));
         SmartDashboard.putBoolean("isFieldDrive", isFieldDrive);
         SmartDashboard.putNumber("gyro", navx.getAngle());
-        MOTOR_MAX_OUT   = SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT);
-        MEC_Y_MAX_OUT   = SmartDashboard.getNumber("MEC_Y_MAX_OUT", MEC_Y_MAX_OUT);
+        MOTOR_MAX_OUT = SmartDashboard.getNumber("MOTOR_MAX_OUT",
+            MOTOR_MAX_OUT);
+        MEC_Y_MAX_OUT = SmartDashboard.getNumber("MEC_Y_MAX_OUT",
+            MEC_Y_MAX_OUT);
     }
 
     public void toggleFieldDrive() {
-        isFieldDrive = !isFieldDrive;
+        setFieldDrive(!isFieldDrive);
+    }
+
+    public void setFieldDrive(boolean on) {
+        isFieldDrive = on;
     }
 
     public void resetFieldDrive() {
@@ -62,27 +67,14 @@ public class Drivetrain extends Subsystem {
         mecDrive.stopMotor();
     }
 
-    public void driveXbox(XboxController xbox) {
-        double yOut = clean(xbox.getRawAxis(OI.XBOX_AXIS_LEFT_X),  XBOX_MIN_IN);
-        double xOut = clean(-xbox.getRawAxis(OI.XBOX_AXIS_LEFT_Y), XBOX_MIN_IN);
-        double zOut = clean(xbox.getRawAxis(OI.XBOX_AXIS_RIGHT_X), XBOX_MIN_IN);
-        //SmartDashboard.putString("xbox", String.format("%f:%f:%f", yOut, xOut, zOut));
-        driveLogistic(yOut, xOut, zOut);
-    }
-
-    // Requires stick type X3D
-    public void driveStick(Joystick stick) {
-        double yOut = stick.getX();
-        double xOut = stick.getY();
-        double zOut = stick.getZ();
-        driveLogistic(yOut, xOut, zOut);
-    }
-
-    public void driveLogistic(double yOut, double xOut, double zOut) {
-        yOut = clean(logisticScale(yOut, MEC_Y_MAX_OUT), MOTOR_MIN_OUT);
-        xOut = clean(logisticScale(xOut), MOTOR_MIN_OUT);
-        zOut = clean(logisticScale(zOut), MOTOR_MIN_OUT);
-        drive(yOut, xOut, zOut);
+    public void driveLogistic(double yPercent, double xPercent,
+        double zPercent) {
+        drive(
+            OI.clean(logisticScale(yPercent, MEC_Y_MAX_OUT),
+                MOTOR_MIN_OUT),
+            OI.clean(logisticScale(xPercent), MOTOR_MIN_OUT),
+            OI.clean(logisticScale(zPercent), MOTOR_MIN_OUT)
+        );
     }
 
     public void drive(double yOut, double xOut, double zOut) {
@@ -99,14 +91,6 @@ public class Drivetrain extends Subsystem {
         double ax = Math.abs(x);
         double y = maxOut / (1 + Math.exp(K_LOG * (X_MID - ax)));
         return Math.copySign(y, x);
-    }
-
-    private static double limit(double x) {
-        return Math.copySign(Math.min(Math.abs(x), MOTOR_MAX_OUT), x);
-    }
-
-    private static double clean(double x, double min) {
-        return (Math.abs(x) < min ? 0 : x);
     }
 
     private static Drivetrain instance;

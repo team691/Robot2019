@@ -14,39 +14,42 @@ public class StickGrab extends Command {
     public StickGrab() {
         requires(arm);
     }
-    
-    // Called just before this Command runs the first time
+
     @Override
     protected void initialize() {
+        // TODO: initial claw position
     }
-    
-    // Called repeatedly when this Command is scheduled to run
+
     @Override
     protected void execute() {
         Joystick stick = oi.getStick(STICK_PORT);
         if (stick == null) {
-            arm.driveStop();
-        } else if (stick.getTrigger()) {
-            arm.driveHold();
+            arm.moveStop();
+            return;
+        }
+        if (stick.getRawButton(8)) {
+            arm.moveHold();
         } else {
-            arm.driveStick(stick);
+            arm.moveTrack(
+                OI.cleanStick(stick.getY()),
+                OI.cleanStick(stick.getX())
+            );
+        }
+        if (stick.getRawButtonPressed(9)) {
+            arm.grab();
         }
     }
-    
-    // Make this return true when this Command no longer needs to run execute()
+
     @Override
     protected boolean isFinished() {
         return false;
     }
-    
-    // Called once after isFinished returns true
+
     @Override
     protected void end() {
-        arm.driveStop();
+        arm.moveStop();
     }
-    
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+
     @Override
     protected void interrupted() {
         end();

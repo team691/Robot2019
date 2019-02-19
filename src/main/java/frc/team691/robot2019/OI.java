@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
+    public static final double STICK_MIN_IN = 0.1;
     public static final int XBOX_BUTTON_X = 1;
     public static final int XBOX_BUTTON_Y = 4;
     public static final int XBOX_BUTTON_A = 2;
@@ -17,6 +18,7 @@ public class OI {
     public static final int XBOX_AXIS_LEFT_Y = 1;
     public static final int XBOX_AXIS_RIGHT_X = 2;
     public static final int XBOX_AXIS_RIGHT_Y = 3;
+    public static final double XBOX_MIN_IN = 0.1;
     // DS USB ports with XboxControllers
     private static final boolean[] XBOX_PORTS = new boolean[] {
         true
@@ -58,6 +60,22 @@ public class OI {
         }
         SmartDashboard.putNumber("numHIDs", res);
         return res;
+    }
+
+    public static double cleanStick(double x) {
+        return clean(x, STICK_MIN_IN);
+    }
+
+    public static double cleanXbox(double x) {
+        return clean(x, XBOX_MIN_IN);
+    }
+
+    public static double clean(double x, double min) {
+        return (Math.abs(x) < min ? 0 : x);
+    }
+
+    public static double limit(double x, int max) {
+        return Math.copySign(Math.min(Math.abs(x), max), x);
     }
     
     private static OI instance;

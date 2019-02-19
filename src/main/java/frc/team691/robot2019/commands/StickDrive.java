@@ -3,14 +3,13 @@ package frc.team691.robot2019.commands;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.Drivetrain;
 
 public class StickDrive extends Command {
     private static final int XBOX_PORT = 0;
-    private static final int BUTTON_RESET       = OI.XBOX_BUTTON_BACK;
-    private static final int BUTTON_FIELD_DRIVE = OI.XBOX_BUTTON_START;
+    private static final int BUTTON_RESET_FD  = OI.XBOX_BUTTON_BACK;
+    private static final int BUTTON_TOGGLE_FD = OI.XBOX_BUTTON_START;
 
     private OI oi           = OI.getInstance();
     private Drivetrain dt   = Drivetrain.getInstance();
@@ -18,17 +17,18 @@ public class StickDrive extends Command {
     public StickDrive() {
         requires(dt);
     }
-    
-    // Called just before this Command runs the first time
+
     @Override
     protected void initialize() {
-        // TODO: Set field drive
+        // TODO: Set field drive?
         if (RobotState.isAutonomous()) {
+            //dt.setFieldDrive(false);
             dt.resetFieldDrive();
+        } else {
+            //dt.setFieldDrive(true);
         }
     }
-    
-    // Called repeatedly when this Command is scheduled to run
+
     @Override
     protected void execute() {
         XboxController xbox = oi.getXbox(XBOX_PORT);
@@ -36,30 +36,29 @@ public class StickDrive extends Command {
             dt.driveStop();
             return;
         }
-        dt.driveXbox(xbox);
-        //dt.driveStop();
-        if (xbox.getRawButtonPressed(BUTTON_RESET)) {
+        dt.driveLogistic(
+            OI.cleanXbox(xbox.getRawAxis(OI.XBOX_AXIS_LEFT_X)),
+            OI.cleanXbox(-xbox.getRawAxis(OI.XBOX_AXIS_LEFT_Y)),
+            OI.cleanXbox(xbox.getRawAxis(OI.XBOX_AXIS_RIGHT_X))
+        );
+        if (xbox.getRawButtonPressed(BUTTON_RESET_FD)) {
             dt.resetFieldDrive();
         }
-        if (xbox.getRawButtonPressed(BUTTON_FIELD_DRIVE)) {
+        if (xbox.getRawButtonPressed(BUTTON_TOGGLE_FD)) {
             dt.toggleFieldDrive();
         }
     }
-    
-    // Make this return true when this Command no longer needs to run execute()
+
     @Override
     protected boolean isFinished() {
         return false;
     }
-    
-    // Called once after isFinished returns true
+
     @Override
     protected void end() {
         dt.driveStop();
     }
-    
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+
     @Override
     protected void interrupted() {
         end();

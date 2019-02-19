@@ -18,14 +18,12 @@ public class StickElevate extends Command {
     public StickElevate() {
         requires(elev);
     }
-    
-    // Called just before this Command runs the first time
+
     @Override
     protected void initialize() {
         // TODO: initial grabber position
     }
-    
-    // Called repeatedly when this Command is scheduled to run
+
     @Override
     protected void execute() {
         Joystick stick = oi.getStick(STICK_PORT);
@@ -33,30 +31,27 @@ public class StickElevate extends Command {
             elev.moveStop();
             return;
         }
-        //elev.drive(0, 0);
+        elev.moveFixed(
+            stick.getRawButton(BUTTON_BOTTOM_UP),
+            stick.getRawButton(BUTTON_BOTTOM_DOWN),
+            stick.getRawButton(BUTTON_SIDE_UP),
+            stick.getRawButton(BUTTON_SIDE_DOWN)
+        );
         if (stick.getTriggerPressed()) {
             elev.grab();
         }
-        elev.moveFixed(stick.getRawButton(BUTTON_BOTTOM_UP),
-            stick.getRawButton(BUTTON_BOTTOM_DOWN),
-            stick.getRawButton(BUTTON_SIDE_UP),
-            stick.getRawButton(BUTTON_SIDE_DOWN));
     }
-    
-    // Make this return true when this Command no longer needs to run execute()
+
     @Override
     protected boolean isFinished() {
         return false;
     }
-    
-    // Called once after isFinished returns true
+
     @Override
     protected void end() {
         elev.moveStop();
     }
-    
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+
     @Override
     protected void interrupted() {
         end();

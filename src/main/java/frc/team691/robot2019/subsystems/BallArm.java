@@ -1,30 +1,36 @@
 package frc.team691.robot2019.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.commands.StickGrab;
 
 public class BallArm extends Subsystem {
-    private static double MOTOR_LOWER_MAX_OUT = 1;
-    private static double MOTOR_UPPER_MAX_OUT = 1;
+    private static double MOTOR_LOWER_MAX_OUT = 1.0;
+    private static double MOTOR_UPPER_MAX_OUT = 1.0;
     private static double MOTOR_HOLD_OUT = 0.2;
 
     private WPI_VictorSPX lowerMotor = new WPI_VictorSPX(1);
     private WPI_VictorSPX upperMotor = new WPI_VictorSPX(3);
-    private Encoder lowerEnc = new Encoder(8, 9);
-    private Encoder upperEnc = new Encoder(6, 7);
+    // TODO: correct encoder ports
+    private Encoder lowerEnc = new Encoder(0, 1);
+    private Encoder upperEnc = new Encoder(7, 8);
+    private DoubleSolenoid claw = new DoubleSolenoid(2, 3);
 
     private int encGoal = 0;
 
     private BallArm() {
         lowerMotor.setInverted(true);
         upperMotor.setInverted(true);
-        SmartDashboard.putNumber("lowerMotorMax", SmartDashboard.getNumber("lowerMotorMax", 1));
-        SmartDashboard.putNumber("upperMotorMax", SmartDashboard.getNumber("upperMotorMax", 1));
-        SmartDashboard.putNumber("motorHoldOut", SmartDashboard.getNumber("motorHoldOut", 0.2));
+        SmartDashboard.putNumber("lowerMotorMax",
+            SmartDashboard.getNumber("lowerMotorMax", MOTOR_LOWER_MAX_OUT));
+        SmartDashboard.putNumber("upperMotorMax",
+            SmartDashboard.getNumber("upperMotorMax", MOTOR_UPPER_MAX_OUT));
+        SmartDashboard.putNumber("motorHoldOut",
+            SmartDashboard.getNumber("motorHoldOut", MOTOR_HOLD_OUT));
     }
 
     @Override
@@ -38,28 +44,48 @@ public class BallArm extends Subsystem {
         SmartDashboard.putNumber("upperMotor", upperMotor.get());
         SmartDashboard.putNumber("lowerEnc", lowerEnc.get());
         SmartDashboard.putNumber("upperEnc", upperEnc.get());
+        MOTOR_LOWER_MAX_OUT = SmartDashboard.getNumber(
+            "lowerMotorMax", MOTOR_LOWER_MAX_OUT);
+        MOTOR_UPPER_MAX_OUT = SmartDashboard.getNumber(
+            "upperMotorMax", MOTOR_UPPER_MAX_OUT);
+        MOTOR_HOLD_OUT = SmartDashboard.getNumber(
+            "motorHoldOut", MOTOR_HOLD_OUT);
     }
 
-    public void driveStop() {
-        lowerMotor.stopMotor();
-        upperMotor.stopMotor();
-        MOTOR_LOWER_MAX_OUT = SmartDashboard.getNumber("lowerMotorMax", 1);
-        MOTOR_UPPER_MAX_OUT = SmartDashboard.getNumber("upperMotorMax", 1);
-        MOTOR_HOLD_OUT = SmartDashboard.getNumber("motorHoldOut", 0.2);
+    public void grab() {
+        if (claw.get() == Value.kForward) {
+            claw.set(Value.kReverse);
+        } else {
+            claw.set(Value.kForward);
+        }
     }
 
-    public void driveHold() {
-        driveStop();
+    public void moveStop() {
+        move(0, 0);
+    }
+
+    public void moveHold() {
+        /*
+        moveStop();
         int error = encGoal - lowerEnc.get();
         if (Math.abs(error) > 2) {
             lowerMotor.set(Math.copySign(MOTOR_HOLD_OUT, error));
         }
+        */
+        move(MOTOR_HOLD_OUT, 0);
     }
 
-    public void driveStick(Joystick stick) {
-        lowerMotor.set(stick.getY() * MOTOR_LOWER_MAX_OUT);
-        upperMotor.set(stick.getX() * MOTOR_UPPER_MAX_OUT);
+    public void moveTrack(double lowerPercent, double upperPercent) {
+        move(
+            lowerPercent * MOTOR_LOWER_MAX_OUT,
+            upperPercent * MOTOR_UPPER_MAX_OUT
+        );
         encGoal = lowerEnc.get();
+    }
+
+    public void move(double lowerOut, double upperOut) {
+        lowerMotor.set(lowerOut);
+        upperMotor.set(upperOut);
     }
 
     private static BallArm instance;
