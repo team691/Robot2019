@@ -22,7 +22,6 @@ public class OI {
         true
     };
 
-    //private Joystick[] sticks;
     private GenericHID[] hids = new GenericHID[DriverStation.kJoystickPorts];
 
     private OI() {

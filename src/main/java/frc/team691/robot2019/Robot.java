@@ -16,6 +16,7 @@ public class Robot extends TimedRobot {
         // Construct subsystems in use
         Drivetrain.getInstance();
         DiscElevator.getInstance();
+        BallArm.getInstance();
         
         oi = OI.getInstance();
         webcam = CameraServer.getInstance().startAutomaticCapture();
