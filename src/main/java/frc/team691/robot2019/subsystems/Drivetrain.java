@@ -80,7 +80,7 @@ public class Drivetrain extends Subsystem {
     public void drive(double yOut, double xOut, double zOut) {
         double gAngle = (isFieldDrive ? navx.getAngle() : 0);
         //SmartDashboard.putString("drive", String.format("%f:%f:%f", yOut, xOut, zOut));
-        mecDrive.driveCartesian(-yOut, -xOut, -zOut, gAngle);
+        mecDrive.driveCartesian(yOut, -xOut, -zOut, gAngle);
     }
 
     private static double logisticScale(double x) {

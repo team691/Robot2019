@@ -7,6 +7,8 @@ import frc.team691.robot2019.subsystems.BallArm;
 
 public class StickGrab extends Command {
     private static final int STICK_PORT = 1;
+    private static final int BUTTON_ARM_HOLD = 8;
+    private static final int BUTTON_CLAW_GRAB = 9;
 
     private OI oi       = OI.getInstance();
     private BallArm arm = BallArm.getInstance();
@@ -27,7 +29,16 @@ public class StickGrab extends Command {
             arm.moveStop();
             return;
         }
-        if (stick.getRawButton(8)) {
+        // TODO: control arm movement
+        double sy = OI.cleanStick(stick.getY());
+        double sx = OI.cleanStick(stick.getX());
+        if (sx + sy == 0) {
+            arm.moveHold();
+        } else {
+            arm.moveTrack(sy, sx);
+        }
+        /*
+        if (stick.getRawButton(BUTTON_ARM_HOLD)) {
             arm.moveHold();
         } else {
             arm.moveTrack(
@@ -35,7 +46,8 @@ public class StickGrab extends Command {
                 OI.cleanStick(stick.getX())
             );
         }
-        if (stick.getRawButtonPressed(9)) {
+        */
+        if (stick.getRawButtonPressed(BUTTON_CLAW_GRAB)) {
             arm.grab();
         }
     }

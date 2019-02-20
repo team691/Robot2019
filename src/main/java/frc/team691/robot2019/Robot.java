@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
         
         oi = OI.getInstance();
         webcam = CameraServer.getInstance().startAutomaticCapture();
+        //webcam.setFPS(30);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class DiscElevator extends Subsystem {
     private static double SIDE_MOTOR_OUT    = 1.0;
 
     // TODO: correct switch ports
-    private DigitalInput overSwitch     = new DigitalInput(6);
+    private DigitalInput overSwitch     = new DigitalInput(0);
     private DigitalInput underSwitch    = new DigitalInput(5);
     private WPI_VictorSPX bottomMotor   = new WPI_VictorSPX(2);
     private WPI_VictorSPX sideMotor     = new WPI_VictorSPX(0);

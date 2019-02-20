@@ -13,11 +13,11 @@ public class BallArm extends Subsystem {
     private static double MOTOR_UPPER_MAX_OUT = 1.0;
     private static double MOTOR_HOLD_OUT = 0.2;
 
+    // TODO: correct encoder ports
+    private Encoder lowerEnc = new Encoder(1, 2);
+    private Encoder upperEnc = new Encoder(3, 4);
     private WPI_VictorSPX lowerMotor = new WPI_VictorSPX(1);
     private WPI_VictorSPX upperMotor = new WPI_VictorSPX(3);
-    // TODO: correct encoder ports
-    private Encoder lowerEnc = new Encoder(0, 1);
-    private Encoder upperEnc = new Encoder(7, 8);
     private DoubleSolenoid claw = new DoubleSolenoid(2, 3);
 
     private int encGoal = 0;
@@ -62,9 +62,11 @@ public class BallArm extends Subsystem {
 
     public void moveStop() {
         move(0, 0);
+        claw.set(Value.kOff);
     }
 
     public void moveHold() {
+        // TODO: use encoder tracking to hold both
         /*
         moveStop();
         int error = encGoal - lowerEnc.get();
@@ -76,10 +78,12 @@ public class BallArm extends Subsystem {
     }
 
     public void moveTrack(double lowerPercent, double upperPercent) {
+        // TODO: limit movement with both encoders
         move(
             lowerPercent * MOTOR_LOWER_MAX_OUT,
             upperPercent * MOTOR_UPPER_MAX_OUT
         );
+        // TODO: track both encoders
         encGoal = lowerEnc.get();
     }
 
