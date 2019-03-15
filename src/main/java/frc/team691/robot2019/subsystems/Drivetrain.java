@@ -25,6 +25,7 @@ public class Drivetrain extends Subsystem {
         rearLeftTalon, frontRightTalon, rearRightTalon);
     
     private boolean isFieldDrive = false;
+    private int swapDir = 1;
 
     private Drivetrain() {
         SmartDashboard.putNumber("MOTOR_MAX_OUT",
@@ -44,6 +45,7 @@ public class Drivetrain extends Subsystem {
             rearLeftTalon.get(), frontLeftTalon.get(),
             rearRightTalon.get(), frontRightTalon.get()));
         SmartDashboard.putBoolean("isFieldDrive", isFieldDrive);
+        SmartDashboard.putBoolean("isSwap", swapDir == -1);
         SmartDashboard.putNumber("gyro", navx.getAngle());
         MOTOR_MAX_OUT = SmartDashboard.getNumber("MOTOR_MAX_OUT",
             MOTOR_MAX_OUT);
@@ -57,10 +59,16 @@ public class Drivetrain extends Subsystem {
 
     public void setFieldDrive(boolean on) {
         isFieldDrive = on;
+        // TODO: correct swap behavior in field-drive
+        swapDir = 1;
     }
 
     public void resetFieldDrive() {
         navx.reset();
+    }
+
+    public void swapFront() {
+        swapDir = -swapDir;
     }
 
     public void driveStop() {
@@ -70,9 +78,9 @@ public class Drivetrain extends Subsystem {
     public void driveLogistic(double yPercent, double xPercent,
         double zPercent) {
         drive(
-            OI.clean(logisticScale(yPercent, MEC_Y_MAX_OUT),
+            swapDir * OI.clean(logisticScale(yPercent, MEC_Y_MAX_OUT),
                 MOTOR_MIN_OUT),
-            OI.clean(logisticScale(xPercent), MOTOR_MIN_OUT),
+            swapDir * OI.clean(logisticScale(xPercent), MOTOR_MIN_OUT),
             OI.clean(logisticScale(zPercent), MOTOR_MIN_OUT)
         );
     }

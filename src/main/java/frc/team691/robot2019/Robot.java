@@ -4,7 +4,6 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.subsystems.*;
 
 public class Robot extends TimedRobot {
@@ -17,7 +16,7 @@ public class Robot extends TimedRobot {
         Drivetrain.getInstance();
         DiscElevator.getInstance();
         BallArm.getInstance();
-        
+
         oi = OI.getInstance();
         webcam = CameraServer.getInstance().startAutomaticCapture();
         //webcam.setFPS(30);
@@ -34,7 +33,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         Scheduler.getInstance().run();
-        
     }
 
     @Override

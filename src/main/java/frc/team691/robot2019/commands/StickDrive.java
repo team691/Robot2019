@@ -10,6 +10,7 @@ public class StickDrive extends Command {
     private static final int XBOX_PORT = 0;
     private static final int BUTTON_RESET_FD  = OI.XBOX_BUTTON_BACK;
     private static final int BUTTON_TOGGLE_FD = OI.XBOX_BUTTON_START;
+    private static final int BUTTON_SWAP = OI.XBOX_BUTTON_Y;
 
     private OI oi           = OI.getInstance();
     private Drivetrain dt   = Drivetrain.getInstance();
@@ -46,6 +47,9 @@ public class StickDrive extends Command {
         }
         if (xbox.getRawButtonPressed(BUTTON_TOGGLE_FD)) {
             dt.toggleFieldDrive();
+        }
+        if (xbox.getRawButtonPressed(BUTTON_SWAP)) {
+            dt.swapFront();
         }
     }
 
