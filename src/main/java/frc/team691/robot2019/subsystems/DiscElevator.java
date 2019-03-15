@@ -50,6 +50,7 @@ public class DiscElevator extends Subsystem {
     }
 
     public void grab() {
+        // TODO: determine initial position
         if (grabber.get() == Value.kForward) {
             grabber.set(Value.kReverse);
         } else {

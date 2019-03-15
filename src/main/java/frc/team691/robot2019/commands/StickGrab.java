@@ -2,13 +2,20 @@ package frc.team691.robot2019.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.BallArm;
 
 public class StickGrab extends Command {
+    // X3D stick
     private static final int STICK_PORT = 1;
-    private static final int BUTTON_ARM_HOLD = 8;
-    private static final int BUTTON_CLAW_GRAB = 9;
+    //private static final int BUTTON_ARM_HOLD  = 8;
+    private static final int BUTTON_GRAB        = 11;
+    private static final int BUTTON_CALIBRATE   = 7;
+    private static final int POV_UPPER_UP   = 0;
+    private static final int POV_UPPER_DOWN = 180;
+    private static final int POV_ELEV_UP    = 90;
+    private static final int POV_ELEV_DOWN  = 315;
 
     private OI oi       = OI.getInstance();
     private BallArm arm = BallArm.getInstance();
@@ -19,7 +26,8 @@ public class StickGrab extends Command {
 
     @Override
     protected void initialize() {
-        // TODO: initial claw position
+        // TODO: initial claw position, update method
+        // arm.grab();
     }
 
     @Override
@@ -30,13 +38,20 @@ public class StickGrab extends Command {
             return;
         }
         // TODO: control arm movement
-        double sy = OI.cleanStick(stick.getY());
-        double sx = OI.cleanStick(stick.getX());
-        if (sx + sy == 0) {
-            arm.moveHold();
+        double lowerp = OI.cleanStick(stick.getY());
+        //double upperp = OI.cleanStick(stick.getX());
+        int pov = stick.getPOV(0);
+        SmartDashboard.putNumber("pov", pov);
+        double upperp = OI.povToSign(
+            pov, POV_UPPER_UP, POV_UPPER_DOWN);
+        double elevp = OI.povToSign(
+            pov, POV_ELEV_UP, POV_ELEV_DOWN);
+        if (upperp + lowerp == 0) {
+            arm.moveArmHold();
         } else {
-            arm.moveTrack(sy, sx);
+            arm.moveArmTrack(lowerp, upperp);
         }
+        arm.moveElevPercent(elevp);
         /*
         if (stick.getRawButton(BUTTON_ARM_HOLD)) {
             arm.moveHold();
@@ -47,8 +62,11 @@ public class StickGrab extends Command {
             );
         }
         */
-        if (stick.getRawButtonPressed(BUTTON_CLAW_GRAB)) {
+        if (stick.getRawButtonPressed(BUTTON_GRAB)) {
             arm.grab();
+        }
+        if (stick.getRawButtonPressed(BUTTON_CALIBRATE)) {
+            arm.calibrate();
         }
     }
 

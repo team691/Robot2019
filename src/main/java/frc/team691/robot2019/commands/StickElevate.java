@@ -6,11 +6,13 @@ import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.DiscElevator;
 
 public class StickElevate extends Command {
+    // X3D stick
     private static final int STICK_PORT = 1;
-    private static final int BUTTON_BOTTOM_DOWN = 2;
-    private static final int BUTTON_BOTTOM_UP   = 3;
+    private static final int BUTTON_GRAB        = 1;
+    private static final int BUTTON_BOTTOM_DOWN = 3;
+    private static final int BUTTON_BOTTOM_UP   = 5;
     private static final int BUTTON_SIDE_DOWN   = 4;
-    private static final int BUTTON_SIDE_UP     = 5;
+    private static final int BUTTON_SIDE_UP     = 6;
 
     private OI oi               = OI.getInstance();
     private DiscElevator elev   = DiscElevator.getInstance();
@@ -21,7 +23,8 @@ public class StickElevate extends Command {
 
     @Override
     protected void initialize() {
-        // TODO: initial grabber position
+        // TODO: initial grabber position, update method
+        // elev.grab();
     }
 
     @Override
@@ -37,7 +40,7 @@ public class StickElevate extends Command {
             stick.getRawButton(BUTTON_SIDE_UP),
             stick.getRawButton(BUTTON_SIDE_DOWN)
         );
-        if (stick.getTriggerPressed()) {
+        if (stick.getRawButtonPressed(BUTTON_GRAB)) {
             elev.grab();
         }
     }

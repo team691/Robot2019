@@ -62,6 +62,10 @@ public class OI {
         return res;
     }
 
+    public static int povToSign(int pov, int plusAngle, int minusAngle) {
+        return (pov == plusAngle ? 1 : (pov == minusAngle ? -1 : 0));
+    }
+
     public static double cleanStick(double x) {
         return clean(x, STICK_MIN_IN);
     }
