@@ -15,7 +15,7 @@ public class StickGrab extends Command {
     private static final int POV_UPPER_UP   = 0;
     private static final int POV_UPPER_DOWN = 180;
     private static final int POV_ELEV_UP    = 90;
-    private static final int POV_ELEV_DOWN  = 315;
+    private static final int POV_ELEV_DOWN  = 270;
 
     private OI oi       = OI.getInstance();
     private BallArm arm = BallArm.getInstance();

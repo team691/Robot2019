@@ -57,7 +57,7 @@ DoubleSolenoid at PCM ports 0, 1.
 
 ### Arm
 + DoubleSolenoid at PCM ports 2, 3.
-+ SparkMax with encoder at CAN ID 0.
++ SparkMax with encoder at CAN ID 1.
 <table>
     <tr><td>VictorSPX</td><td>CAN ID</td></tr>
     <tr><td>Lower</td><td>1</td></tr>
