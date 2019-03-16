@@ -12,13 +12,15 @@ import frc.team691.robot2019.commands.StickElevate;
 public class DiscElevator extends Subsystem {
     private static double BOTTOM_MOTOR_OUT  = 1.0;
     private static double SIDE_MOTOR_OUT    = 1.0;
+    private static final Value HAND_OPEN    = Value.kReverse;
+    private static final Value HAND_SHUT    = Value.kForward;
 
     // TODO: correct switch ports
     private DigitalInput overSwitch     = new DigitalInput(0);
     private DigitalInput underSwitch    = new DigitalInput(5);
     private WPI_VictorSPX bottomMotor   = new WPI_VictorSPX(2);
     private WPI_VictorSPX sideMotor     = new WPI_VictorSPX(0);
-    private DoubleSolenoid grabber      = new DoubleSolenoid(0, 1);
+    private DoubleSolenoid hand         = new DoubleSolenoid(0, 1);
     
     private DiscElevator() {
         bottomMotor.setInverted(true);
@@ -37,7 +39,7 @@ public class DiscElevator extends Subsystem {
     public void periodic() {
         SmartDashboard.putBoolean("overSwitch", overSwitch.get());
         SmartDashboard.putBoolean("underSwitch", underSwitch.get());
-        SmartDashboard.putString("grabber", grabber.get().toString());
+        SmartDashboard.putString("grabber", hand.get().toString());
         BOTTOM_MOTOR_OUT = SmartDashboard.getNumber(
             "BOTTOM_MOTOR_OUT", BOTTOM_MOTOR_OUT);
         SIDE_MOTOR_OUT   = SmartDashboard.getNumber(
@@ -46,15 +48,14 @@ public class DiscElevator extends Subsystem {
     
     public void moveStop() {
         move(0, 0);
-        grabber.set(Value.kOff);
+        hand.set(Value.kOff);
     }
 
     public void grab() {
-        // TODO: determine initial position
-        if (grabber.get() == Value.kForward) {
-            grabber.set(Value.kReverse);
+        if (hand.get() == HAND_OPEN) {
+            hand.set(HAND_SHUT);
         } else {
-            grabber.set(Value.kForward);
+            hand.set(HAND_OPEN);
         }
     }
     

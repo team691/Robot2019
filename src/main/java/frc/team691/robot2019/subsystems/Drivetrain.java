@@ -11,16 +11,16 @@ import frc.team691.robot2019.commands.StickDrive;
 
 public class Drivetrain extends Subsystem {
     private static final double MOTOR_MIN_OUT = 0.05;
-    private static final double K_LOG = 10;
-    private static final double X_MID = 0.5;
+    private static final double K_LOG   = 10;
+    private static final double X_MID   = 0.5;
     private static double MOTOR_MAX_OUT = 0.6;
     private static double MEC_Y_MAX_OUT = 0.8;
 
     private AHRS navx = new AHRS(SPI.Port.kMXP);
-    private WPI_TalonSRX frontLeftTalon = new WPI_TalonSRX(1);
-    private WPI_TalonSRX rearLeftTalon = new WPI_TalonSRX(0);
-    private WPI_TalonSRX frontRightTalon = new WPI_TalonSRX(3);
-    private WPI_TalonSRX rearRightTalon = new WPI_TalonSRX(2);
+    private WPI_TalonSRX frontLeftTalon     = new WPI_TalonSRX(1);
+    private WPI_TalonSRX rearLeftTalon      = new WPI_TalonSRX(0);
+    private WPI_TalonSRX frontRightTalon    = new WPI_TalonSRX(3);
+    private WPI_TalonSRX rearRightTalon     = new WPI_TalonSRX(2);
     private MecanumDrive mecDrive = new MecanumDrive(frontLeftTalon,
         rearLeftTalon, frontRightTalon, rearRightTalon);
     

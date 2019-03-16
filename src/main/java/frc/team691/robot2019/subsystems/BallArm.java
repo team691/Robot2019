@@ -12,18 +12,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.commands.StickGrab;
 
 public class BallArm extends Subsystem {
-    private static double MOTOR_LOWER_MAX_OUT = 1.0;
-    private static double MOTOR_UPPER_MAX_OUT = 0.5;
-    private static double MOTOR_HOLD_OUT = 0.2;
-    private static double MOTOR_ELEV_MAX_OUT = 0.6;
+    private static double MOTOR_LOWER_MAX_OUT   = 1.0;
+    private static double MOTOR_UPPER_MAX_OUT   = 0.5;
+    private static double MOTOR_HOLD_OUT        = 0.2;
+    private static double MOTOR_ELEV_MAX_OUT    = 0.6;
+    // TODO: determine open/close positions
+    private static final Value CLAW_OPEN = Value.kForward;
+    private static final Value CLAW_SHUT = Value.kReverse;
 
     // TODO: correct encoder, Victor ports
     private WPI_VictorSPX lowerMotor = new WPI_VictorSPX(1);
     private WPI_VictorSPX upperMotor = new WPI_VictorSPX(3);
-    //private CANSparkMax elevMotor = new CANSparkMax(0, MotorType.kBrushless);
+    private CANSparkMax elevMotor = new CANSparkMax(1, MotorType.kBrushless);
     private Encoder lowerEnc = new Encoder(1, 2);
     private Encoder upperEnc = new Encoder(3, 4);
-    //private CANEncoder elevEnc = elevMotor.getEncoder();
+    private CANEncoder elevEnc = elevMotor.getEncoder();
     private DoubleSolenoid claw = new DoubleSolenoid(2, 3);
 
     private int encGoal = 0;
@@ -70,15 +73,14 @@ public class BallArm extends Subsystem {
     public void calibrate() {
         lowerEnc.reset();
         upperEnc.reset();
-        //elevEnc.setPosition(0);
+        elevEnc.setPosition(0);
     }
 
     public void grab() {
-        // TODO: determine initial position
-        if (claw.get() == Value.kForward) {
-            claw.set(Value.kReverse);
+        if (claw.get() == CLAW_OPEN) {
+            claw.set(CLAW_SHUT);
         } else {
-            claw.set(Value.kForward);
+            claw.set(CLAW_OPEN);
         }
     }
 
@@ -115,7 +117,7 @@ public class BallArm extends Subsystem {
     }
 
     public void moveElev(double out) {
-        //elevMotor.set(out);
+        elevMotor.set(out);
     }
 
     public void moveArm(double lowerOut, double upperOut) {

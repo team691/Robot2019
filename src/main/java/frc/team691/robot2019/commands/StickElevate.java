@@ -23,8 +23,7 @@ public class StickElevate extends Command {
 
     @Override
     protected void initialize() {
-        // TODO: initial grabber position, update method
-        // elev.grab();
+        elev.grab();
     }
 
     @Override

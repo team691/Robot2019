@@ -26,8 +26,7 @@ public class StickGrab extends Command {
 
     @Override
     protected void initialize() {
-        // TODO: initial claw position, update method
-        // arm.grab();
+        //arm.grab();
     }
 
     @Override
