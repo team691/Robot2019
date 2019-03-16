@@ -31,6 +31,7 @@ public class StickGrab extends Command {
     @Override
     protected void execute() {
         Joystick stick = oi.getStick(STICK_PORT);
+        //if (stick == null || SmartDashboard.getBoolean("isElev", false)) {
         if (stick == null) {
             arm.moveStop();
             return;
@@ -53,7 +54,8 @@ public class StickGrab extends Command {
         arm.moveElevPercent(elevp);
         */
         arm.moveArm(0, 0);
-        arm.moveElevPercent(OI.cleanStick(-stick.getY()));
+        //arm.moveElevPercent(OI.cleanStick(-stick.getY()));
+        arm.moveElev(0);
 
         if (stick.getRawButtonPressed(BUTTON_GRAB)) {
             arm.grab();

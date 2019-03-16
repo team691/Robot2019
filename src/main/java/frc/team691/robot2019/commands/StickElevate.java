@@ -2,11 +2,13 @@ package frc.team691.robot2019.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.DiscElevator;
 
 public class StickElevate extends Command {
     private static final int STICK_PORT = 1; // X3D
+    private static final int BUTTON_EMODE       = 2;
     private static final int BUTTON_GRAB        = 1;
     private static final int BUTTON_BOTTOM_DOWN = 3;
     private static final int BUTTON_BOTTOM_UP   = 5;
@@ -17,6 +19,8 @@ public class StickElevate extends Command {
     private DiscElevator elev   = DiscElevator.getInstance();
 
     public StickElevate() {
+        SmartDashboard.putBoolean("isElev",
+            SmartDashboard.getBoolean("isElev", true));
         requires(elev);
     }
 
@@ -28,6 +32,7 @@ public class StickElevate extends Command {
     @Override
     protected void execute() {
         Joystick stick = oi.getStick(STICK_PORT);
+        //if (stick == null || !SmartDashboard.getBoolean("isElev", true)) {
         if (stick == null) {
             elev.moveStop();
             return;
@@ -40,6 +45,11 @@ public class StickElevate extends Command {
         );
         if (stick.getRawButtonPressed(BUTTON_GRAB)) {
             elev.grab();
+        }
+
+        if (stick.getRawButtonPressed(BUTTON_EMODE)) {
+            SmartDashboard.putBoolean("isElev",
+                !SmartDashboard.getBoolean("isElev", false));
         }
     }
 
