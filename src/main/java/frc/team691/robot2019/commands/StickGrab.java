@@ -7,8 +7,7 @@ import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.BallArm;
 
 public class StickGrab extends Command {
-    // X3D stick
-    private static final int STICK_PORT = 1;
+    private static final int STICK_PORT = 1; // X3D
     //private static final int BUTTON_ARM_HOLD  = 8;
     private static final int BUTTON_GRAB        = 11;
     private static final int BUTTON_CALIBRATE   = 7;
@@ -37,10 +36,11 @@ public class StickGrab extends Command {
             return;
         }
         // TODO: control arm movement
-        double lowerp = OI.cleanStick(stick.getY());
-        //double upperp = OI.cleanStick(stick.getX());
         int pov = stick.getPOV(0);
         SmartDashboard.putNumber("pov", pov);
+        /*
+        double lowerp = OI.cleanStick(stick.getY());
+        //double upperp = OI.cleanStick(stick.getX());
         double upperp = OI.povToSign(
             pov, POV_UPPER_UP, POV_UPPER_DOWN);
         double elevp = OI.povToSign(
@@ -51,16 +51,10 @@ public class StickGrab extends Command {
             arm.moveArmTrack(lowerp, upperp);
         }
         arm.moveElevPercent(elevp);
-        /*
-        if (stick.getRawButton(BUTTON_ARM_HOLD)) {
-            arm.moveHold();
-        } else {
-            arm.moveTrack(
-                OI.cleanStick(stick.getY()),
-                OI.cleanStick(stick.getX())
-            );
-        }
         */
+        arm.moveArm(0, 0);
+        arm.moveElevPercent(OI.cleanStick(-stick.getY()));
+
         if (stick.getRawButtonPressed(BUTTON_GRAB)) {
             arm.grab();
         }

@@ -6,8 +6,7 @@ import frc.team691.robot2019.OI;
 import frc.team691.robot2019.subsystems.DiscElevator;
 
 public class StickElevate extends Command {
-    // X3D stick
-    private static final int STICK_PORT = 1;
+    private static final int STICK_PORT = 1; // X3D
     private static final int BUTTON_GRAB        = 1;
     private static final int BUTTON_BOTTOM_DOWN = 3;
     private static final int BUTTON_BOTTOM_UP   = 5;

@@ -15,7 +15,7 @@ public class BallArm extends Subsystem {
     private static double MOTOR_LOWER_MAX_OUT   = 1.0;
     private static double MOTOR_UPPER_MAX_OUT   = 0.5;
     private static double MOTOR_HOLD_OUT        = 0.2;
-    private static double MOTOR_ELEV_MAX_OUT    = 0.6;
+    private static double MOTOR_ELEV_MAX_OUT    = 1.0;
     // TODO: determine open/close positions
     private static final Value CLAW_OPEN = Value.kForward;
     private static final Value CLAW_SHUT = Value.kReverse;
@@ -29,7 +29,8 @@ public class BallArm extends Subsystem {
     private CANEncoder elevEnc = elevMotor.getEncoder();
     private DoubleSolenoid claw = new DoubleSolenoid(2, 3);
 
-    private int encGoal = 0;
+    private int leGoal = 0;
+    private int ueGoal = 0;
 
     private BallArm() {
         lowerMotor.setInverted(true);
@@ -93,9 +94,9 @@ public class BallArm extends Subsystem {
     public void moveArmHold() {
         // TODO: use encoder tracking to hold both
         /*
-        moveStop();
-        int error = encGoal - lowerEnc.get();
-        if (Math.abs(error) > 2) {
+        int lerr = leGoal - lowerEnc.get();
+        int uerr = ueGoal - upperEnc.get();
+        if (Math.abs(lerr) > 2) {
             lowerMotor.set(Math.copySign(MOTOR_HOLD_OUT, error));
         }
         */
@@ -108,8 +109,8 @@ public class BallArm extends Subsystem {
             lowerPercent * MOTOR_LOWER_MAX_OUT,
             upperPercent * MOTOR_UPPER_MAX_OUT
         );
-        // TODO: track both encoders
-        encGoal = lowerEnc.get();
+        leGoal = lowerEnc.get();
+        ueGoal = upperEnc.get();
     }
 
     public void moveElevPercent(double percent) {
