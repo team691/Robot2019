@@ -24,10 +24,11 @@ public class StickElevate extends Command {
     private DiscElevator elev   = DiscElevator.getInstance();
     private AutoElevate aeCommand = new AutoElevate();
 
-    private int rd = 0;
+    private int rd = 100;
     //private boolean povPressed = false;
 
     public StickElevate() {
+        SmartDashboard.putData(aeCommand);
         SmartDashboard.putNumber("aeDir", 1);
         SmartDashboard.putBoolean("isElev",
             SmartDashboard.getBoolean("isElev", true));

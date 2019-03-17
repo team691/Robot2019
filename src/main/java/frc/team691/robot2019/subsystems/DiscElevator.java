@@ -19,7 +19,8 @@ public class DiscElevator extends Subsystem {
     private DigitalInput overSwitch     = new DigitalInput(0);
     private DigitalInput underSwitch    = new DigitalInput(5);
     private WPI_VictorSPX bottomMotor   = new WPI_VictorSPX(2);
-    private WPI_VictorSPX sideMotor     = new WPI_VictorSPX(0);
+    //private WPI_VictorSPX sideMotor     = new WPI_VictorSPX(0);
+    private WPI_VictorSPX sideMotor     = new WPI_VictorSPX(1);
     private WPI_VictorSPX releaseMotor  = new WPI_VictorSPX(3);
     private DoubleSolenoid hand         = new DoubleSolenoid(0, 1);
     
@@ -77,9 +78,9 @@ public class DiscElevator extends Subsystem {
     // ~Fixed methods return isMoving
     public boolean moveFixed(boolean bottomUp, boolean bottomDown,
         boolean sideUp, boolean sideDown) {
-        return moveBottomFixed(bottomUp, bottomDown)
-            && moveMotorFixed(sideMotor, SIDE_MOTOR_OUT,
+        boolean sideMoving = moveMotorFixed(sideMotor, SIDE_MOTOR_OUT,
             sideUp, sideDown);
+        return moveBottomFixed(bottomUp, bottomDown) && sideMoving;
     }
 
     public boolean moveBottomFixed(boolean up, boolean down) {
