@@ -7,26 +7,33 @@ Command-based robot code for FRC 2019.
 + Driver station port 1: __Logitech Extreme3D__.
 
 ### Drivetrain Controls
-+ Mecanum drive operated by XboxController.
-+ Strafe with __left-hand stick__.
-+ Turn with __right-hand stick__.
++ Mecanum drive operated by XboxController, with
+two drive modes:<br>FPS and Racing, toggled with
+__B-button__ (state in __isFPS__ on SmartDasboard).
++ In FPS mode (default):<br>
+Strafe with __left-hand stick__.<br>
+Turn with __right-hand stick__.
++ In Racing mode:<br>Drive forward/backward
+and turn with __left-hand stick__.<br>
+Strafe left/right with __right-hand stick__.
 + Robot front swapped with __Y-button__.
-+ Robot-oriented drive by default.<br>Toggle between
-field-oriented with __START__ button.<br>State
-shown in __isFieldDrive__ on SmartDashboard.<br>
++ Robot-oriented drive by default.<br>Toggle
+betweenfield-oriented with __START__ button.<br>
+State in __isFD__ on SmartDashboard.<br>
 Calibrate field-drive gyro with __BACK__ button.
 
 ### Elevator Controls
 + Button-operated by Extreme3D.
 + Move spindle up/down with buttons __5/3__.
 + Move assembly up/down with buttons __6/4__.
-+ Grab and release with __trigger__.
++ Open and shut with __trigger__.
++ Release motor tighten/loosen with buttons __9/11__.
 
-### Arm Controls
+### Arm Controls (defunct)
 + Stick- and button-operated by Extreme3D.
 + Move lower part with __Y-axis__.
 + Move upper part with __POV up/down__.
-+ Move arm elevator up/down with POV __right/left__.
++ Move arm elevator up/down with __POV right/left__.
 + Calibrate arm encoder positions with button
 __7__ or __calibrateArm__ in SmartDashboard.
 

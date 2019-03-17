@@ -44,7 +44,7 @@ public class Drivetrain extends Subsystem {
         SmartDashboard.putString("talon", String.format("%f:%f:%f:%f",
             rearLeftTalon.get(), frontLeftTalon.get(),
             rearRightTalon.get(), frontRightTalon.get()));
-        SmartDashboard.putBoolean("isFieldDrive", isFieldDrive);
+        SmartDashboard.putBoolean("isFD", isFieldDrive);
         SmartDashboard.putBoolean("isSwap", swapDir == -1);
         SmartDashboard.putNumber("gyro", navx.getAngle());
         MOTOR_MAX_OUT = SmartDashboard.getNumber("MOTOR_MAX_OUT",

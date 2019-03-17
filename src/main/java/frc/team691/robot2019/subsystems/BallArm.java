@@ -22,7 +22,8 @@ public class BallArm extends Subsystem {
 
     // TODO: correct encoder, Victor ports
     private WPI_VictorSPX lowerMotor = new WPI_VictorSPX(1);
-    private WPI_VictorSPX upperMotor = new WPI_VictorSPX(3);
+    //private WPI_VictorSPX upperMotor = new WPI_VictorSPX(3);
+    private WPI_VictorSPX upperMotor = lowerMotor;
     private CANSparkMax elevMotor = new CANSparkMax(1, MotorType.kBrushless);
     private Encoder lowerEnc = new Encoder(1, 2);
     private Encoder upperEnc = new Encoder(3, 4);
@@ -57,8 +58,8 @@ public class BallArm extends Subsystem {
             calibrate();
             SmartDashboard.putBoolean("calibrateArm", false);
         }
-        SmartDashboard.putNumber("lowerMotor", lowerMotor.get());
-        SmartDashboard.putNumber("upperMotor", upperMotor.get());
+        //SmartDashboard.putNumber("lowerMotor", lowerMotor.get());
+        //SmartDashboard.putNumber("upperMotor", upperMotor.get());
         SmartDashboard.putNumber("lowerEnc", lowerEnc.get());
         SmartDashboard.putNumber("upperEnc", upperEnc.get());
         MOTOR_LOWER_MAX_OUT = SmartDashboard.getNumber(

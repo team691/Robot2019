@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
     public static final double STICK_MIN_IN = 0.1;
@@ -58,7 +57,6 @@ public class OI {
                 hids[i] = null;
             }
         }
-        SmartDashboard.putNumber("numHIDs", res);
         return res;
     }
 

@@ -17,18 +17,16 @@ public class StickDrive extends Command {
     private OI oi           = OI.getInstance();
     private Drivetrain dt   = Drivetrain.getInstance();
 
-    private boolean isFpsMode = true;
+    private boolean isFpsMode;
 
     public StickDrive() {
-        SmartDashboard.putBoolean("fpsMode",
-            SmartDashboard.getBoolean("fpsMode", isFpsMode));
-        SmartDashboard.putBoolean("switchFpsMode", false);
+        isFpsMode = SmartDashboard.getBoolean("isFPS", true);
+        SmartDashboard.putBoolean("isFPS", isFpsMode);
         requires(dt);
     }
 
     @Override
     protected void initialize() {
-        isFpsMode = SmartDashboard.getBoolean("fpsMode", isFpsMode);
         // TODO: Set field drive?
         if (RobotState.isAutonomous()) {
             //dt.setFieldDrive(false);
@@ -60,14 +58,9 @@ public class StickDrive extends Command {
             OI.cleanXbox(z)
         );
 
-        if (SmartDashboard.getBoolean("switchFpsMode", false)) {
-            toggleFpsMode();
-            SmartDashboard.putBoolean("switchFpsMode", false);
-        }
         if (xbox.getRawButtonPressed(BUTTON_FPS_MODE)) {
             toggleFpsMode();
         }
-        
         if (xbox.getRawButtonPressed(BUTTON_RESET_FD)) {
             dt.resetFieldDrive();
         }
@@ -81,7 +74,7 @@ public class StickDrive extends Command {
 
     private void toggleFpsMode() {
         isFpsMode = !isFpsMode;
-        SmartDashboard.putBoolean("fpsMode", isFpsMode);
+        SmartDashboard.putBoolean("isFPS", isFpsMode);
     }
 
     @Override

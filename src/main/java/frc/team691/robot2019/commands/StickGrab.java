@@ -9,7 +9,7 @@ import frc.team691.robot2019.subsystems.BallArm;
 public class StickGrab extends Command {
     private static final int STICK_PORT = 1; // X3D
     //private static final int BUTTON_ARM_HOLD  = 8;
-    private static final int BUTTON_GRAB        = 11;
+    private static final int BUTTON_GRAB        = 8;
     private static final int BUTTON_CALIBRATE   = 7;
     private static final int POV_UPPER_UP   = 0;
     private static final int POV_UPPER_DOWN = 180;
@@ -54,7 +54,7 @@ public class StickGrab extends Command {
         }
         //arm.moveElevPercent(elevp);
         */
-        
+
         arm.moveArm(0, 0);
         arm.moveElevPercent(OI.cleanStick(-stick.getY()));
 
