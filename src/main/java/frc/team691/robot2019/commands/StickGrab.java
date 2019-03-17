@@ -40,22 +40,23 @@ public class StickGrab extends Command {
         int pov = stick.getPOV(0);
         SmartDashboard.putNumber("pov", pov);
         /*
-        double lowerp = OI.cleanStick(stick.getY());
+        //double lowerp = OI.cleanStick(stick.getY());
         //double upperp = OI.cleanStick(stick.getX());
         double upperp = OI.povToSign(
             pov, POV_UPPER_UP, POV_UPPER_DOWN);
-        double elevp = OI.povToSign(
+        //double elevp = OI.povToSign(
+        double lowerp = OI.povToSign(
             pov, POV_ELEV_UP, POV_ELEV_DOWN);
         if (upperp + lowerp == 0) {
             arm.moveArmHold();
         } else {
             arm.moveArmTrack(lowerp, upperp);
         }
-        arm.moveElevPercent(elevp);
+        //arm.moveElevPercent(elevp);
         */
+        
         arm.moveArm(0, 0);
-        //arm.moveElevPercent(OI.cleanStick(-stick.getY()));
-        arm.moveElev(0);
+        arm.moveElevPercent(OI.cleanStick(-stick.getY()));
 
         if (stick.getRawButtonPressed(BUTTON_GRAB)) {
             arm.grab();

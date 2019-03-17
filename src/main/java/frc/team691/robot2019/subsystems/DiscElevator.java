@@ -64,16 +64,28 @@ public class DiscElevator extends Subsystem {
         sideMotor.set(sideOut);
     }
 
-    public void moveFixed(boolean bottomUp, boolean bottomDown,
+    // Returns isTouched
+    public boolean moveBottomAuto(int dir) {
+        boolean up = dir > 0;
+        boolean down = dir < 0;
+        return !moveBottomFixed(up, down);
+    }
+    
+    // ~Fixed methods return isMoving
+    public boolean moveFixed(boolean bottomUp, boolean bottomDown,
         boolean sideUp, boolean sideDown) {
-        moveMotorFixed(bottomMotor, BOTTOM_MOTOR_OUT,
-            bottomUp    && overSwitch.get(),
-            bottomDown  && underSwitch.get());
-        moveMotorFixed(sideMotor, SIDE_MOTOR_OUT,
+        return moveBottomFixed(bottomUp, bottomDown)
+            && moveMotorFixed(sideMotor, SIDE_MOTOR_OUT,
             sideUp, sideDown);
     }
 
-    private static void moveMotorFixed(SpeedController motor,
+    public boolean moveBottomFixed(boolean up, boolean down) {
+        return moveMotorFixed(bottomMotor, BOTTOM_MOTOR_OUT,
+            up    && overSwitch.get(),
+            down  && underSwitch.get());
+    }
+
+    private static boolean moveMotorFixed(SpeedController motor,
         double out, boolean up, boolean down) {
         double mout = 0;
         if (up) {
@@ -82,6 +94,7 @@ public class DiscElevator extends Subsystem {
             mout = -out;
         }
         motor.set(mout);
+        return mout != 0;
     }
 
     private static DiscElevator instance;

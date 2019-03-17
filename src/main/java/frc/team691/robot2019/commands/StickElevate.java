@@ -17,6 +17,7 @@ public class StickElevate extends Command {
 
     private OI oi               = OI.getInstance();
     private DiscElevator elev   = DiscElevator.getInstance();
+    private AutoElevate aeCommand = new AutoElevate();
 
     public StickElevate() {
         SmartDashboard.putBoolean("isElev",
@@ -37,6 +38,13 @@ public class StickElevate extends Command {
             elev.moveStop();
             return;
         }
+        /*
+        if (stick.getRawButtonPressed(0)) {
+            aeCommand.start(1);
+            return;
+        }
+        */
+
         elev.moveFixed(
             stick.getRawButton(BUTTON_BOTTOM_UP),
             stick.getRawButton(BUTTON_BOTTOM_DOWN),
