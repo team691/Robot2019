@@ -29,7 +29,7 @@ Calibrate field-drive gyro with __BACK__ button.
 + Open and shut with __trigger__.
 + Release motor tighten/loosen with buttons __9/11__.
 
-### Arm Controls (defunct)
+### Arm Controls (DEFUNCT)
 + Stick- and button-operated by Extreme3D.
 + Move lower part with __Y-axis__.
 + Move upper part with __POV up/down__.
@@ -53,7 +53,7 @@ DoubleSolenoid at PCM ports 0, 1.
 <table>
     <tr><td>VictorSPX</td><td>CAN ID</td></tr>
     <tr><td>Bottom</td><td>2</td></tr>
-    <tr><td>Side</td><td>0</td></tr>
+    <tr><td>Side</td><td>1</td></tr>
 </table>
 <br>
 <table>
@@ -62,7 +62,7 @@ DoubleSolenoid at PCM ports 0, 1.
     <tr><td>Over</td><td>0</td></tr>
 </table>
 
-### Arm
+### Arm (DISREGARD)
 + DoubleSolenoid at PCM ports 2, 3.
 + SparkMax with encoder at CAN ID 1.
 <table>
