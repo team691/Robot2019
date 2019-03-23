@@ -18,8 +18,8 @@ public class DiscElevator extends Subsystem {
 
     private DigitalInput overSwitch     = new DigitalInput(0);
     private DigitalInput underSwitch    = new DigitalInput(5);
-    private WPI_VictorSPX bottomMotor   = new WPI_VictorSPX(2);
     private WPI_VictorSPX sideMotor     = new WPI_VictorSPX(1);
+    private WPI_VictorSPX bottomMotor   = new WPI_VictorSPX(2);
     private WPI_VictorSPX releaseMotor  = new WPI_VictorSPX(3);
     private DoubleSolenoid hand         = new DoubleSolenoid(0, 1);
     
@@ -85,6 +85,7 @@ public class DiscElevator extends Subsystem {
     public boolean moveBottomFixed(boolean up, boolean down) {
         boolean os = overSwitch.get();
         boolean us = underSwitch.get();
+        // TODO: Limit overrun correctly
         return moveMotorFixed(bottomMotor, BOTTOM_MOTOR_OUT,
             /*!us || */(up    && os),
             /*!os || */(down  && us));

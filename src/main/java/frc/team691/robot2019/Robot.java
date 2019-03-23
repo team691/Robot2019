@@ -18,6 +18,7 @@ public class Robot extends TimedRobot {
         //BallArm.getInstance();
 
         oi = OI.getInstance();
+
         webcam = CameraServer.getInstance().startAutomaticCapture();
         //webcam.setFPS(30);
     }

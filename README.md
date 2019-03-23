@@ -3,76 +3,76 @@ Command-based robot code for FRC 2019.
 
 ## Controls
 ### Controller Assumptions
-+ Driver station port 0: __Logitech XboxController__.
-+ Driver station port 1: __Logitech Extreme3D__.
+| DS #  | Controller                |
+|:-----:|:------------------------- |
+| 0     | Logitech XboxController   |
+| 1     | Logitech Extreme3D        |
 
 ### Drivetrain Controls
-+ Mecanum drive operated by XboxController, with
-two drive modes:<br>FPS and Racing, toggled with
-__B-button__ (state in __isFPS__ on SmartDasboard).
-+ In FPS mode (default):<br>
-Strafe with __left-hand stick__.<br>
-Turn with __right-hand stick__.
-+ In Racing mode:<br>Drive forward/backward
-and turn with __left-hand stick__.<br>
-Strafe left/right with __right-hand stick__.
-+ Robot front swapped with __Y-button__.
-+ Robot-oriented drive by default.<br>Toggle
-betweenfield-oriented with __START__ button.<br>
-State in __isFD__ on SmartDashboard.<br>
-Calibrate field-drive gyro with __BACK__ button.
+* Mecanum drive operated by XboxController, with
+  two drive modes:
+  * FPS mode (default):
+    * Strafe with __left-hand stick__.
+    * Turn with __right-hand stick__.
+  * Racing mode:
+    * Drive forward/backward and turn with
+      __left-hand stick__.
+    * Strafe left/right with __right-hand stick__.
+  * Toggle with __B-button__
+    (state in __isFPS__ on SmartDasboard).
+* Robot front swapped with __Y-button__.
+* (Advanced) Robot-oriented drive by default.
+  * Toggle between field-oriented with __START__
+    button.
+  * State in __isFD__ on SmartDashboard.
+  * Calibrate field-drive gyro with __BACK__ button.
 
 ### Elevator Controls
-+ Button-operated by Extreme3D.
-+ Move spindle up/down with buttons __5/3__.
-+ Move assembly up/down with buttons __6/4__.
-+ Open and shut with __trigger__.
-+ Release motor tighten/loosen with buttons __9/11__.
+* Button-operated by Extreme3D.
+* Move first stage up/down with buttons __5/3__.
+* Move second stage up/down with buttons __6/4__.
+* Open and shut grabber with __trigger__.
+* Tighten/loosen the release motor with
+  buttons __9/11__.
 
 ### Arm Controls (DEFUNCT)
-+ Stick- and button-operated by Extreme3D.
-+ Move lower part with __Y-axis__.
-+ Move upper part with __POV up/down__.
-+ Move arm elevator up/down with __POV right/left__.
-+ Calibrate arm encoder positions with button
-__7__ or __calibrateArm__ in SmartDashboard.
+* Stick- and button-operated by Extreme3D.
+* Move lower part with __Y-axis__.
+* Move upper part with __POV up/down__.
+* Move arm elevator up/down with __POV right/left__.
+* Calibrate arm encoder positions with button
+  __7__ or __calibrateArm__ in SmartDashboard.
 
 ## Hardware
 USB Webcam expected.
 ### Drivetrain
-<table>
-    <tr><td>TalonSRX</td><td>CAN ID</td></tr>
-    <tr><td>Front left</td><td>1</td></tr>
-    <tr><td>Rear left</td><td>0</td></tr>
-    <tr><td>Front right</td><td>3</td></tr>
-    <tr><td>Rear right</td><td>2</td></tr>
-</table>
+| TalonSRX      | CAN ID    |
+|:------------- |:---------:|
+| Front left    | 1         |
+| Front right   | 3         |
+| Rear left     | 0         |
+| Rear right    | 2         |
 
 ### Elevator
 DoubleSolenoid at PCM ports 0, 1.
-<table>
-    <tr><td>VictorSPX</td><td>CAN ID</td></tr>
-    <tr><td>Bottom</td><td>2</td></tr>
-    <tr><td>Side</td><td>1</td></tr>
-</table>
-<br>
-<table>
-    <tr><td>NC Limit Switch</td><td>DIO</td></tr>
-    <tr><td>Under</td><td>5</td></tr>
-    <tr><td>Over</td><td>0</td></tr>
-</table>
 
-### Arm (DISREGARD)
-+ DoubleSolenoid at PCM ports 2, 3.
-+ SparkMax with encoder at CAN ID 1.
-<table>
-    <tr><td>VictorSPX</td><td>CAN ID</td></tr>
-    <tr><td>Lower</td><td>1</td></tr>
-    <tr><td>Upper</td><td>3</td></tr>
-</table>
-<br>
-<table>
-    <tr><td>Encoder</td><td>DIOs</td></tr>
-    <tr><td>Lower</td><td>1, 2</td></tr>
-    <tr><td>Upper</td><td>3, 4</td></tr>
-</table>
+| VictorSPX | CAN ID    |
+|:--------- |:---------:|
+| Side      | 1         |
+| Bottom    | 2         |
+| Release   | 3         |
+
+| NC Limit Switch   | DIO   |
+|:----------------- |:-----:|
+| Over              | 0     |
+| Under             | 5     |
+
+### Arm (DISCONNECTED)
+* DoubleSolenoid at PCM ports 2, 3.
+* SparkMax with encoder at CAN ID 1.
+* Arm motors unknown.
+
+| Encoder   | DIOs  |
+|:--------- |:-----:|
+| Lower     | 1, 2  |
+| Upper     | 3, 4  |

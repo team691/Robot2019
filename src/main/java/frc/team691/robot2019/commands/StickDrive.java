@@ -43,6 +43,7 @@ public class StickDrive extends Command {
             dt.driveStop();
             return;
         }
+
         double y, x, z;
         if (isFpsMode) {
             y = xbox.getRawAxis(OI.XBOX_AXIS_LEFT_X);
@@ -61,6 +62,7 @@ public class StickDrive extends Command {
         if (xbox.getRawButtonPressed(BUTTON_FPS_MODE)) {
             toggleFpsMode();
         }
+
         if (xbox.getRawButtonPressed(BUTTON_RESET_FD)) {
             dt.resetFieldDrive();
         }

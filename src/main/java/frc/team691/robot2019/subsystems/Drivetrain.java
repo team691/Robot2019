@@ -13,8 +13,8 @@ public class Drivetrain extends Subsystem {
     private static final double MOTOR_MIN_OUT = 0.05;
     private static final double K_LOG   = 10;
     private static final double X_MID   = 0.5;
-    private static double MOTOR_MAX_OUT = 0.6;
-    private static double MEC_Y_MAX_OUT = 0.8;
+    private static double MOTOR_MAX_OUT = 0.9;
+    private static double MEC_Y_MAX_OUT = 1.0;
 
     private AHRS navx = new AHRS(SPI.Port.kMXP);
     private WPI_TalonSRX frontLeftTalon     = new WPI_TalonSRX(1);
