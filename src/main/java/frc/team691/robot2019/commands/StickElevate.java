@@ -17,14 +17,18 @@ public class StickElevate extends Command {
     private static final int BUTTON_BOTTOM_UP   = 5;
     private static final int BUTTON_SIDE_DOWN   = 4;
     private static final int BUTTON_SIDE_UP     = 6;
+    private static final int BUTTON_RESET_GRAB  = 12;
     //private static final int POV_AUTO_UP        = 0;
     //private static final int POV_AUTO_DOWN      = 180;
-    private static final int LOOPS_RELEASE      = 25;
+    private static final double RELEASE_TIME_SEC = 1;
 
     private OI oi               = OI.getInstance();
     private DiscElevator elev   = DiscElevator.getInstance();
     //private AutoElevate aeCommand = new AutoElevate();
+    private ResetElevate resetCommand =
+        new ResetElevate(RELEASE_TIME_SEC + 0.12);
 
+    private boolean needAutoInit = true;
     private int rd = 0;
     //private boolean povPressed = false;
 
@@ -39,10 +43,11 @@ public class StickElevate extends Command {
     @Override
     protected void initialize() {
         System.out.println("se initialize");
-        if (RobotState.isAutonomous()) {
-            rd = LOOPS_RELEASE;
+        if (RobotState.isAutonomous() && needAutoInit) {
+            rd = (int) (RELEASE_TIME_SEC / 0.02);
+            elev.setHand(DiscElevator.HAND_OPEN);
         }
-        elev.setHand(DiscElevator.HAND_OPEN);
+        needAutoInit = RobotState.isOperatorControl();
     }
 
     @Override
@@ -71,6 +76,10 @@ public class StickElevate extends Command {
             elev.moveReleaseDir(1);
         } else if (stick.getRawButton(BUTTON_RELEASE_BW)) {
             elev.moveReleaseDir(-1);
+        }
+
+        if (stick.getRawButtonReleased(BUTTON_RESET_GRAB)) {
+            resetCommand.start();
         }
 
         // TODO: Implement, use AutoElevate correctly
@@ -106,7 +115,6 @@ public class StickElevate extends Command {
     protected void end() {
         System.out.println("se end");
         elev.moveStop();
-        elev.setHand(DiscElevator.HAND_SHUT);
     }
 
     @Override

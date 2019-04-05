@@ -13,8 +13,8 @@ public class Drivetrain extends Subsystem {
     private static final double MOTOR_MIN_OUT = 0.05;
     private static final double K_LOG   = 10;
     private static final double X_MID   = 0.5;
-    private static double MOTOR_MAX_OUT = 0.9;
-    private static double MEC_Y_MAX_OUT = 1.0;
+    private static double MOTOR_MAX_OUT = 0.8;
+    private static double MEC_Y_MAX_OUT = 0.9;
 
     private AHRS navx = new AHRS(SPI.Port.kMXP);
     private WPI_TalonSRX frontLeftTalon     = new WPI_TalonSRX(1);
@@ -28,10 +28,8 @@ public class Drivetrain extends Subsystem {
     private int swapDir = 1;
 
     private Drivetrain() {
-        SmartDashboard.putNumber("MOTOR_MAX_OUT",
-            SmartDashboard.getNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT));
-        SmartDashboard.putNumber("MEC_Y_MAX_OUT",
-            SmartDashboard.getNumber("MEC_Y_MAX_OUT", MEC_Y_MAX_OUT));
+        SmartDashboard.putNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT);
+        SmartDashboard.putNumber("MEC_Y_MAX_OUT", MEC_Y_MAX_OUT);
     }
 
     @Override
@@ -76,13 +74,21 @@ public class Drivetrain extends Subsystem {
     }
 
     public void driveLogistic(double yPercent, double xPercent,
-        double zPercent) {
+        double zPercent, double xzMaxOut, double yMaxOut) {
         drive(
-            swapDir * OI.clean(logisticScale(yPercent, MEC_Y_MAX_OUT),
+            swapDir * OI.clean(logisticScale(yPercent, yMaxOut),
                 MOTOR_MIN_OUT),
-            swapDir * OI.clean(logisticScale(xPercent), MOTOR_MIN_OUT),
-            OI.clean(logisticScale(zPercent), MOTOR_MIN_OUT)
+            swapDir * OI.clean(logisticScale(xPercent, xzMaxOut),
+                MOTOR_MIN_OUT),
+            OI.clean(logisticScale(zPercent, xzMaxOut),
+                MOTOR_MIN_OUT)
         );
+    }
+
+    public void driveLogistic(double yPercent, double xPercent,
+        double zPercent) {
+        driveLogistic(yPercent, xPercent, zPercent,
+            MOTOR_MAX_OUT, MEC_Y_MAX_OUT);
     }
 
     public void drive(double yOut, double xOut, double zOut) {

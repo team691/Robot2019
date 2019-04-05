@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+@SuppressWarnings("unchecked")
 public class OI {
     public static final double STICK_MIN_IN = 0.1;
     // DS USB ports with XboxControllers
@@ -15,14 +16,8 @@ public class OI {
     private GenericHID[] hids = new GenericHID[DriverStation.kJoystickPorts];
 
     private OI() {
-        for (int i = 0; i < xboxTypes.length; i++) {
-            SendableChooser<Integer> sc = new SendableChooser<>();
-            sc.setDefaultOption("PS4", DualActionXbox.TYPE_PS4);
-            sc.addOption("LOGITECH", DualActionXbox.TYPE_LOGITECH);
-            xboxTypes[i] = sc;
-            SmartDashboard.putData("port" + i, sc);
-        }
-        updateSticks();
+        createXboxTypes();
+        updateHids();
     }
 
     public Joystick getStick(int i) {
@@ -39,7 +34,19 @@ public class OI {
         return null;
     }
 
-    int updateSticks() {
+    private void createXboxTypes() {
+        for (int i = 0; i < xboxTypes.length; i++) {
+            String[] tn = DualActionXbox.TYPE_NAMES;
+            SendableChooser<Integer> sc = new SendableChooser<>();
+            sc.setDefaultOption(tn[0], 0);
+            for (int j = 1; j < tn.length; j++)
+                sc.addOption(tn[j], j);
+            xboxTypes[i] = sc;
+            SmartDashboard.putData("port" + i, sc);
+        }
+    }
+
+    int updateHids() {
         int res = 0;
         DriverStation ds = DriverStation.getInstance();
         for (int i = 0; i < hids.length; i++) {
@@ -90,18 +97,29 @@ public class OI {
     public static class DualActionXbox extends XboxController {
         public static final int TYPE_LOGITECH   = 0;
         public static final int TYPE_PS4        = 1;
+        public static final String[] TYPE_NAMES = new String[] {
+            "LOGITECH", "PS4"
+        };
         public static final double[] TYPE_MIN_INS =
             new double[] {0.1, 0};
+        public static final int AXIS_LEFT_X     = 0;
+        public static final int AXIS_LEFT_Y     = 1;
+        public static final int AXIS_RIGHT_X    = 2;
+        public static final int AXIS_RIGHT_Y    = 3;
         public static final int[][] TYPE_AXES   = new int[][] {
             {0, 0},
             {1, 1},
             {2, 2},
             {3, 5}
         };
-        public static final int AXIS_LEFT_X     = 0;
-        public static final int AXIS_LEFT_Y     = 1;
-        public static final int AXIS_RIGHT_X    = 2;
-        public static final int AXIS_RIGHT_Y    = 3;
+        public static final int BUTTON_LEFT     = 0;
+        public static final int BUTTON_RIGHT    = 1;
+        public static final int BUTTON_UP       = 2;
+        public static final int BUTTON_DOWN     = 3;
+        public static final int BUTTON_LEFT_SP  = 4;
+        public static final int BUTTON_RIGHT_SP = 5;
+        public static final int BUTTON_UP_SP    = 6;
+        public static final int BUTTON_DOWN_SP  = 7;
         public static final int[][] TYPE_BUTTONS = new int[][] {
             {1, 1},
             {3, 3},
@@ -112,14 +130,6 @@ public class OI {
             {14, 14},
             {13, 13}
         };
-        public static final int BUTTON_LEFT     = 0;
-        public static final int BUTTON_RIGHT    = 1;
-        public static final int BUTTON_UP       = 2;
-        public static final int BUTTON_DOWN     = 3;
-        public static final int BUTTON_LEFT_SP  = 4;
-        public static final int BUTTON_RIGHT_SP = 5;
-        public static final int BUTTON_UP_SP    = 6;
-        public static final int BUTTON_DOWN_SP  = 7;
 
         public int type;
 

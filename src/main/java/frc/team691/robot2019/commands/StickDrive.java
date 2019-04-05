@@ -53,6 +53,8 @@ public class StickDrive extends Command {
             z = xbox.getAxisClean(DualActionXbox.AXIS_LEFT_X);
         }
         x = -xbox.getAxisClean(DualActionXbox.AXIS_LEFT_Y);
+
+        //TODO: Turbo/slow mode
         dt.driveLogistic(y, x, z);
 
         if (xbox.getButtonPressed(BUTTON_FPS_MODE)) {

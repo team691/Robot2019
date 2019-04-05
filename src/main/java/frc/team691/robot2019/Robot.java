@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        oi.updateSticks();
+        oi.updateHids();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        oi.updateSticks();
+        oi.updateHids();
     }
 
     @Override
