@@ -21,6 +21,7 @@ public class StickElevate extends Command {
     //private static final int POV_AUTO_UP        = 0;
     //private static final int POV_AUTO_DOWN      = 180;
     private static final double RELEASE_TIME_SEC = 1;
+    private static final int SIDE_STOP_LOOPS = 2;
 
     private OI oi               = OI.getInstance();
     private DiscElevator elev   = DiscElevator.getInstance();
@@ -30,6 +31,7 @@ public class StickElevate extends Command {
 
     private boolean needAutoInit = true;
     private int rd = 0;
+    private int sdd = 0;
     //private boolean povPressed = false;
 
     public StickElevate() {
@@ -65,9 +67,14 @@ public class StickElevate extends Command {
         elev.moveFixed(
             stick.getRawButton(BUTTON_BOTTOM_UP),
             stick.getRawButton(BUTTON_BOTTOM_DOWN),
-            stick.getRawButton(BUTTON_SIDE_UP),
-            stick.getRawButton(BUTTON_SIDE_DOWN)
+            stick.getRawButton(BUTTON_SIDE_UP) || sdd > 0,
+            stick.getRawButton(BUTTON_SIDE_DOWN), true
         );
+        if (sdd > 0) sdd--;
+        if (stick.getRawButtonReleased(BUTTON_SIDE_DOWN)) {
+            sdd = SIDE_STOP_LOOPS;
+        }
+
         if (stick.getRawButtonPressed(BUTTON_GRAB)) {
             elev.grab();
         }

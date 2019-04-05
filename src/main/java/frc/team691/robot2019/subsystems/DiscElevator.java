@@ -17,7 +17,7 @@ public class DiscElevator extends Subsystem {
     public static final Value HAND_SHUT    = Value.kForward;
 
     private DigitalInput overSwitch     = new DigitalInput(0);
-    private DigitalInput underSwitch    = new DigitalInput(5);
+    private DigitalInput underSwitch    = new DigitalInput(1);
     private WPI_VictorSPX sideMotor     = new WPI_VictorSPX(1);
     private WPI_VictorSPX bottomMotor   = new WPI_VictorSPX(2);
     private WPI_VictorSPX releaseMotor  = new WPI_VictorSPX(3);
@@ -71,24 +71,28 @@ public class DiscElevator extends Subsystem {
 
     // Returns isTouched
     public boolean moveBottomAuto(int dir) {
-        return !moveBottomFixed(dir > 0, dir < 0);
+        return !moveBottomFixed(dir > 0, dir < 0, false);
     }
     
     // ~Fixed methods return isMoving
     public boolean moveFixed(boolean bottomUp, boolean bottomDown,
-        boolean sideUp, boolean sideDown) {
+        boolean sideUp, boolean sideDown, boolean normalize) {
         boolean sideMoving = moveMotorFixed(sideMotor, SIDE_MOTOR_OUT,
             sideUp, sideDown);
-        return moveBottomFixed(bottomUp, bottomDown) && sideMoving;
+        return moveBottomFixed(bottomUp, bottomDown, normalize) && sideMoving;
     }
 
-    public boolean moveBottomFixed(boolean up, boolean down) {
+    public boolean moveBottomFixed(boolean up, boolean down,
+        boolean normalize) {
         boolean os = overSwitch.get();
         boolean us = underSwitch.get();
-        // TODO: Limit overrun correctly
-        return moveMotorFixed(bottomMotor, BOTTOM_MOTOR_OUT,
-            /*!us || */(up    && os),
-            /*!os || */(down  && us));
+        boolean u = up    && os;
+        boolean d = down  && us;
+        if (normalize) {
+            u = !us || u;
+            d = !os || d;
+        }
+        return moveMotorFixed(bottomMotor, BOTTOM_MOTOR_OUT, u, d);
     }
 
     private static boolean moveMotorFixed(SpeedController motor,

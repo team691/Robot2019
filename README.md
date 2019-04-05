@@ -66,7 +66,7 @@ DoubleSolenoid at PCM ports 0, 1.
 | NC Limit Switch   | DIO   |
 |:----------------- |:-----:|
 | Over              | 0     |
-| Under             | 5     |
+| Under             | 1     |
 
 ### Arm (DISCONNECTED)
 * DoubleSolenoid at PCM ports 2, 3.

@@ -13,8 +13,9 @@ public class Drivetrain extends Subsystem {
     private static final double MOTOR_MIN_OUT = 0.05;
     private static final double K_LOG   = 10;
     private static final double X_MID   = 0.5;
-    private static double MOTOR_MAX_OUT = 0.8;
-    private static double MEC_Y_MAX_OUT = 0.9;
+    private static double MEC_X_MAX_OUT = 0.62;
+    private static double MEC_Y_MAX_OUT = 0.8;
+    private static double MEC_Z_MAX_OUT = 0.76;
 
     private AHRS navx = new AHRS(SPI.Port.kMXP);
     private WPI_TalonSRX frontLeftTalon     = new WPI_TalonSRX(1);
@@ -28,8 +29,12 @@ public class Drivetrain extends Subsystem {
     private int swapDir = 1;
 
     private Drivetrain() {
-        SmartDashboard.putNumber("MOTOR_MAX_OUT", MOTOR_MAX_OUT);
-        SmartDashboard.putNumber("MEC_Y_MAX_OUT", MEC_Y_MAX_OUT);
+        SmartDashboard.putNumber("MEC_X_MAX_OUT",
+            SmartDashboard.getNumber("MEC_X_MAX_OUT", MEC_X_MAX_OUT));
+        SmartDashboard.putNumber("MEC_Y_MAX_OUT",
+            SmartDashboard.getNumber("MEC_Y_MAX_OUT", MEC_Y_MAX_OUT));
+        SmartDashboard.putNumber("MEC_Z_MAX_OUT",
+            SmartDashboard.getNumber("MEC_Z_MAX_OUT", MEC_Z_MAX_OUT));
     }
 
     @Override
@@ -45,10 +50,12 @@ public class Drivetrain extends Subsystem {
         SmartDashboard.putBoolean("isFD", isFieldDrive);
         SmartDashboard.putBoolean("isSwap", swapDir == -1);
         SmartDashboard.putNumber("gyro", navx.getAngle());
-        MOTOR_MAX_OUT = SmartDashboard.getNumber("MOTOR_MAX_OUT",
-            MOTOR_MAX_OUT);
+        MEC_X_MAX_OUT = SmartDashboard.getNumber("MEC_X_MAX_OUT",
+            MEC_X_MAX_OUT);
         MEC_Y_MAX_OUT = SmartDashboard.getNumber("MEC_Y_MAX_OUT",
             MEC_Y_MAX_OUT);
+        MEC_Z_MAX_OUT = SmartDashboard.getNumber("MEC_Z_MAX_OUT",
+            MEC_Z_MAX_OUT);
     }
 
     public void toggleFieldDrive() {
@@ -74,31 +81,26 @@ public class Drivetrain extends Subsystem {
     }
 
     public void driveLogistic(double yPercent, double xPercent,
-        double zPercent, double xzMaxOut, double yMaxOut) {
+        double zPercent, double yMaxOut, double xMaxOut, double zMaxOut) {
         drive(
             swapDir * OI.clean(logisticScale(yPercent, yMaxOut),
                 MOTOR_MIN_OUT),
-            swapDir * OI.clean(logisticScale(xPercent, xzMaxOut),
+            swapDir * OI.clean(logisticScale(xPercent, xMaxOut),
                 MOTOR_MIN_OUT),
-            OI.clean(logisticScale(zPercent, xzMaxOut),
-                MOTOR_MIN_OUT)
+            OI.clean(logisticScale(zPercent, zMaxOut), MOTOR_MIN_OUT)
         );
     }
 
     public void driveLogistic(double yPercent, double xPercent,
         double zPercent) {
         driveLogistic(yPercent, xPercent, zPercent,
-            MOTOR_MAX_OUT, MEC_Y_MAX_OUT);
+            MEC_Y_MAX_OUT, MEC_X_MAX_OUT, MEC_Z_MAX_OUT);
     }
 
     public void drive(double yOut, double xOut, double zOut) {
         double gAngle = (isFieldDrive ? navx.getAngle() : 0);
         //SmartDashboard.putString("drive", String.format("%f:%f:%f", yOut, xOut, zOut));
         mecDrive.driveCartesian(yOut, -xOut, -zOut, gAngle);
-    }
-
-    private static double logisticScale(double x) {
-        return logisticScale(x, MOTOR_MAX_OUT);
     }
 
     private static double logisticScale(double x, double maxOut) {
