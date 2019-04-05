@@ -3,13 +3,13 @@ Command-based robot code for FRC 2019.
 
 ## Controls
 ### Controller Assumptions
-| DS #  | Controller                |
-|:-----:|:------------------------- |
-| 0     | Logitech XboxController   |
-| 1     | Logitech Extreme3D        |
+| DS #  | Controller            |
+|:-----:|:--------------------- |
+| 0     | DualActionXbox        |
+| 1     | Logitech Extreme3D    |
 
 ### Drivetrain Controls
-* Mecanum drive operated by XboxController, with
+* Mecanum drive operated by DualActionXbox, with
   two drive modes:
   * FPS mode (default):
     * Strafe with __left-hand stick__.
@@ -18,14 +18,15 @@ Command-based robot code for FRC 2019.
     * Drive forward/backward and turn with
       __left-hand stick__.
     * Strafe left/right with __right-hand stick__.
-  * Toggle with __B-button__
+  * Toggle with __pad down-button__
     (state in __isFPS__ on SmartDasboard).
-* Robot front swapped with __Y-button__.
+* Robot front swapped with __pad up-button__.
 * (Advanced) Robot-oriented drive by default.
-  * Toggle between field-oriented with __START__
-    button.
+  * Toggle between field-oriented with
+    __special right-button__.
   * State in __isFD__ on SmartDashboard.
-  * Calibrate field-drive gyro with __BACK__ button.
+  * Calibrate field-drive gyro with
+    __special left-button__.
 
 ### Elevator Controls
 * Button-operated by Extreme3D.
