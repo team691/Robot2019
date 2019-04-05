@@ -22,6 +22,7 @@ public class StickElevate extends Command {
     //private static final int POV_AUTO_DOWN      = 180;
     private static final double RELEASE_TIME_SEC = 1;
     private static final int SIDE_STOP_LOOPS = 2;
+    private static final int BOTTOM_STOP_LOOPS = 2;
 
     private OI oi               = OI.getInstance();
     private DiscElevator elev   = DiscElevator.getInstance();
@@ -30,8 +31,7 @@ public class StickElevate extends Command {
         new ResetElevate(RELEASE_TIME_SEC + 0.12);
 
     private boolean needAutoInit = true;
-    private int rd = 0;
-    private int sdd = 0;
+    private int rd, bud, bdd, sdd;
     //private boolean povPressed = false;
 
     public StickElevate() {
@@ -65,11 +65,19 @@ public class StickElevate extends Command {
         }
 
         elev.moveFixed(
-            stick.getRawButton(BUTTON_BOTTOM_UP),
-            stick.getRawButton(BUTTON_BOTTOM_DOWN),
+            stick.getRawButton(BUTTON_BOTTOM_UP) || bdd > 0,
+            stick.getRawButton(BUTTON_BOTTOM_DOWN) || bud > 0,
             stick.getRawButton(BUTTON_SIDE_UP) || sdd > 0,
-            stick.getRawButton(BUTTON_SIDE_DOWN), true
+            stick.getRawButton(BUTTON_SIDE_DOWN), false
         );
+        if (bud > 0) bud--;
+        if (stick.getRawButtonReleased(BUTTON_BOTTOM_UP)) {
+            bud = BOTTOM_STOP_LOOPS;
+        }
+        if (bdd > 0) bdd--;
+        if (stick.getRawButtonReleased(BUTTON_BOTTOM_DOWN)) {
+            bdd = BOTTOM_STOP_LOOPS;
+        }
         if (sdd > 0) sdd--;
         if (stick.getRawButtonReleased(BUTTON_SIDE_DOWN)) {
             sdd = SIDE_STOP_LOOPS;
