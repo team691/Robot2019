@@ -31,6 +31,7 @@ public class StickElevate extends Command {
         new ResetElevate(RELEASE_TIME_SEC + 0.12);
 
     private boolean needAutoInit = true;
+    private boolean usp, osp;
     private int rd, bud, bdd, sdd;
     //private boolean povPressed = false;
 
@@ -68,16 +69,22 @@ public class StickElevate extends Command {
             stick.getRawButton(BUTTON_BOTTOM_UP) || bdd > 0,
             stick.getRawButton(BUTTON_BOTTOM_DOWN) || bud > 0,
             stick.getRawButton(BUTTON_SIDE_UP) || sdd > 0,
-            stick.getRawButton(BUTTON_SIDE_DOWN), false
+            stick.getRawButton(BUTTON_SIDE_DOWN), true
         );
+        boolean us = !elev.getUnderSwitch();
+        boolean os = !elev.getOverSwitch();
         if (bud > 0) bud--;
-        if (stick.getRawButtonReleased(BUTTON_BOTTOM_UP)) {
+        if (stick.getRawButtonReleased(BUTTON_BOTTOM_UP) ||
+            (usp && !us)) {
             bud = BOTTOM_STOP_LOOPS;
         }
         if (bdd > 0) bdd--;
-        if (stick.getRawButtonReleased(BUTTON_BOTTOM_DOWN)) {
+        if (stick.getRawButtonReleased(BUTTON_BOTTOM_DOWN) ||
+            (osp && !os)) {
             bdd = BOTTOM_STOP_LOOPS;
         }
+        usp = us;
+        osp = os;
         if (sdd > 0) sdd--;
         if (stick.getRawButtonReleased(BUTTON_SIDE_DOWN)) {
             sdd = SIDE_STOP_LOOPS;

@@ -41,6 +41,14 @@ public class DiscElevator extends Subsystem {
         SmartDashboard.putBoolean("underSwitch", underSwitch.get());
         SmartDashboard.putString("grabber", hand.get().toString());
     }
+
+    public boolean getUnderSwitch() {
+        return underSwitch.get();
+    }
+
+    public boolean getOverSwitch() {
+        return overSwitch.get();
+    }
     
     public void moveStop() {
         move(0, 0);
