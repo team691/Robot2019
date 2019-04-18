@@ -8,6 +8,8 @@ public class AutoElevate extends Command {
     private DiscElevator elev = DiscElevator.getInstance();
 
     private int dir = 0;
+    private int cd = 0;
+    private boolean hasTouched = false;
 
     public AutoElevate() {
         requires(elev);
@@ -25,15 +27,30 @@ public class AutoElevate extends Command {
     @Override
     protected void initialize() {
         System.out.println("ae initialize");
+        cd = 0;
+        hasTouched = false;
     }
 
     @Override
     protected void execute() {
+        //boolean touch = elev.moveBottomAuto(dir);
+        boolean touch = (dir > 0 ? elev.getOverSwitch() :
+            elev.getUnderSwitch());
+        if (!hasTouched && touch) {
+            hasTouched = true;
+            cd = DiscElevator.BOTTOM_STOP_LOOPS;
+        }
+        if (cd > 0) {
+            System.out.println(cd);
+            //elev.moveBottomAuto(-dir);
+            cd--;
+        }
     }
 
     @Override
     protected boolean isFinished() {
-        boolean done = elev.moveBottomAuto(dir);
+        //boolean done = elev.moveBottomAuto(dir);
+        boolean done = hasTouched && cd == 0;
         SmartDashboard.putBoolean("aeDone", done);
         return done;
     }
@@ -41,7 +58,7 @@ public class AutoElevate extends Command {
     @Override
     protected void end() {
         System.out.println("ae end");
-        elev.moveStop();
+        elev.move(0, 0);
     }
 
     @Override

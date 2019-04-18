@@ -21,12 +21,10 @@ public class StickElevate extends Command {
     //private static final int POV_AUTO_UP        = 0;
     //private static final int POV_AUTO_DOWN      = 180;
     private static final double RELEASE_TIME_SEC = 1;
-    private static final int SIDE_STOP_LOOPS = 2;
-    private static final int BOTTOM_STOP_LOOPS = 2;
 
     private OI oi               = OI.getInstance();
     private DiscElevator elev   = DiscElevator.getInstance();
-    //private AutoElevate aeCommand = new AutoElevate();
+    private AutoElevate aeCommand = new AutoElevate();
     private ResetElevate resetCommand =
         new ResetElevate(RELEASE_TIME_SEC + 0.12);
 
@@ -37,6 +35,7 @@ public class StickElevate extends Command {
 
     public StickElevate() {
         SmartDashboard.putNumber("aeDir", 1);
+        SmartDashboard.putData(aeCommand);
 
         SmartDashboard.putBoolean("isElev",
             SmartDashboard.getBoolean("isElev", true));
@@ -76,18 +75,18 @@ public class StickElevate extends Command {
         if (bud > 0) bud--;
         if (stick.getRawButtonReleased(BUTTON_BOTTOM_UP) ||
             (usp && !us)) {
-            bud = BOTTOM_STOP_LOOPS;
+            bud = DiscElevator.BOTTOM_STOP_LOOPS;
         }
         if (bdd > 0) bdd--;
         if (stick.getRawButtonReleased(BUTTON_BOTTOM_DOWN) ||
             (osp && !os)) {
-            bdd = BOTTOM_STOP_LOOPS;
+            bdd = DiscElevator.BOTTOM_STOP_LOOPS;
         }
         usp = us;
         osp = os;
         if (sdd > 0) sdd--;
         if (stick.getRawButtonReleased(BUTTON_SIDE_DOWN)) {
-            sdd = SIDE_STOP_LOOPS;
+            sdd = DiscElevator.SIDE_STOP_LOOPS;
         }
 
         if (stick.getRawButtonPressed(BUTTON_GRAB)) {
@@ -105,6 +104,7 @@ public class StickElevate extends Command {
         }
 
         // TODO: Implement, use AutoElevate correctly
+        aeCommand.setDir((int) SmartDashboard.getNumber("aeDir", 0));
         /*
         int pov = stick.getPOV(0);
         boolean povp = (pov == POV_AUTO_UP || pov == POV_AUTO_DOWN);

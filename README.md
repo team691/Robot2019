@@ -67,7 +67,7 @@ DoubleSolenoid at PCM ports 0, 1.
 | Bottom    | 2         |
 | Release   | 3         |
 
-| NC Limit Switch   | DIO   |
+| NO Limit Switch   | DIO   |
 |:----------------- |:-----:|
 | Over              | 0     |
 | Under             | 1     |

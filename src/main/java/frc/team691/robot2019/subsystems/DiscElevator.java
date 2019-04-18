@@ -13,6 +13,8 @@ public class DiscElevator extends Subsystem {
     private static final double BOTTOM_MOTOR_OUT  = 1.0;
     private static final double SIDE_MOTOR_OUT    = 1.0;
     private static final double RELEASE_MOTOR_OUT = 0.5;
+    public static final int SIDE_STOP_LOOPS       = 2;
+    public static final int BOTTOM_STOP_LOOPS     = 2;
     public static final Value HAND_OPEN    = Value.kReverse;
     public static final Value HAND_SHUT    = Value.kForward;
 
