@@ -18,9 +18,9 @@ public class StickElevate extends Command {
     private static final int BUTTON_SIDE_DOWN   = 4;
     private static final int BUTTON_SIDE_UP     = 6;
     private static final int BUTTON_RESET_GRAB  = 12;
-    //private static final int POV_AUTO_UP        = 0;
-    //private static final int POV_AUTO_DOWN      = 180;
-    private static final double RELEASE_TIME_SEC = 1;
+    private static final int POV_AUTO_UP        = 0;
+    private static final int POV_AUTO_DOWN      = 180;
+    private static final double RELEASE_TIME_SEC = 1.2;
 
     private OI oi               = OI.getInstance();
     private DiscElevator elev   = DiscElevator.getInstance();
@@ -31,7 +31,6 @@ public class StickElevate extends Command {
     private boolean needAutoInit = true;
     private boolean usp, osp;
     private int rd, bud, bdd, sdd;
-    //private boolean povPressed = false;
 
     public StickElevate() {
         SmartDashboard.putNumber("aeDir", 1);
@@ -56,6 +55,7 @@ public class StickElevate extends Command {
     protected void execute() {
         elev.moveReleaseDir(rd > 0 ? -1 : 0);
         if (rd > 0) rd--;
+        aeCommand.setDir((int) SmartDashboard.getNumber("aeDir", 0));
 
         Joystick stick = oi.getStick(STICK_PORT);
         //if (stick == null || !SmartDashboard.getBoolean("isElev", true)) {
@@ -104,23 +104,11 @@ public class StickElevate extends Command {
         }
 
         // TODO: Implement, use AutoElevate correctly
-        aeCommand.setDir((int) SmartDashboard.getNumber("aeDir", 0));
-        /*
         int pov = stick.getPOV(0);
-        boolean povp = (pov == POV_AUTO_UP || pov == POV_AUTO_DOWN);
-        if (!povp && povPressed) {
-            povPressed = false;
+        if (pov == POV_AUTO_UP || pov == POV_AUTO_DOWN) {
             aeCommand.start(pov == POV_AUTO_UP ? 1 : -1);
             return;
         }
-        povPressed = povp;
-        */
-        /*
-        if (stick.getRawButtonReleased(2)) {
-            aeCommand.start((int) SmartDashboard.getNumber("aeDir", 1));
-            return;
-        }
-        */
 
         if (stick.getRawButtonPressed(BUTTON_EMODE)) {
             SmartDashboard.putBoolean("isElev",
