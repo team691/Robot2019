@@ -33,7 +33,7 @@ public class Melevator extends Subsystem {
         SmartDashboard.putNumber("sideMotor", sideMotor.get());
         SmartDashboard.putString("grabber", hand.get().toString());
     }
-    
+
     public void moveStop() {
         move(0);
         moveReleaseDir(0);
@@ -59,7 +59,7 @@ public class Melevator extends Subsystem {
     public void moveReleaseDir(int dir) {
         releaseMotor.set(dir * RELEASE_MOTOR_OUT);
     }
-    
+
     // ~Fixed methods return isMoving
     public boolean moveFixed(boolean sideUp, boolean sideDown) {
         return moveMotorFixed(sideMotor, SIDE_MOTOR_OUT, sideUp, sideDown);

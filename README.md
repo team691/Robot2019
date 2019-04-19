@@ -31,7 +31,7 @@ Command-based robot code for FRC 2019.
 ### Elevator Controls
 * Button-operated by Extreme3D.
 * At start of Autonomous, grabber opens and
-  lowers by release motor for 1 sec.
+  lowers by release motor for 1.2 sec.
 * Move first stage up/down with buttons __5/3__.
 * Move second stage up/down with buttons __6/4__.
 * Auto-move first stage to top/bottom

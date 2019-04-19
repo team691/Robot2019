@@ -7,23 +7,16 @@ import frc.team691.robot2019.subsystems.Belevator;
 public class AutoElevate extends Command {
     private Belevator belev = Belevator.getInstance();
 
-    private int dir = 0;
-    private int cd = 0;
-    private boolean isStarted = false;
-    private boolean hasTouched = false;
-    private boolean done = false;
+    private int     dir, cd;
+    private boolean hasTouched, done;
 
     public AutoElevate() {
-        requires(belev);
+        this(0);
     }
 
-    @Override
-    public void start() {
-        System.out.println("ae start");
-        if (!isStarted) {
-            isStarted = true;
-            super.start();
-        }
+    public AutoElevate(int dir) {
+        setDir(dir);
+        requires(belev);
     }
 
     public void start(int dir) {
@@ -47,9 +40,6 @@ public class AutoElevate extends Command {
     @Override
     protected void execute() {
         if (!hasTouched && belev.moveBottomAuto(dir)) {
-        //boolean touch = !(dir > 0 ? elev.getOverSwitch() :
-        //    elev.getUnderSwitch());
-        //if (!hasTouched && touch) {
             hasTouched = true;
             cd = Belevator.BOTTOM_STOP_LOOPS;
         }
@@ -72,7 +62,6 @@ public class AutoElevate extends Command {
     @Override
     protected void end() {
         System.out.println("ae end");
-        isStarted = false;
         belev.moveStop();
     }
 
