@@ -14,8 +14,8 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // Construct subsystems in use
         Drivetrain.getInstance();
-        DiscElevator.getInstance();
-        //BallArm.getInstance();
+        Melevator.getInstance();
+        Belevator.getInstance();
 
         oi = OI.getInstance();
 

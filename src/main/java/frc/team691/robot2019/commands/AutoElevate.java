@@ -2,10 +2,10 @@ package frc.team691.robot2019.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team691.robot2019.subsystems.DiscElevator;
+import frc.team691.robot2019.subsystems.Belevator;
 
 public class AutoElevate extends Command {
-    private DiscElevator elev = DiscElevator.getInstance();
+    private Belevator belev = Belevator.getInstance();
 
     private int dir = 0;
     private int cd = 0;
@@ -14,11 +14,12 @@ public class AutoElevate extends Command {
     private boolean done = false;
 
     public AutoElevate() {
-        requires(elev);
+        requires(belev);
     }
 
     @Override
     public void start() {
+        System.out.println("ae start");
         if (!isStarted) {
             isStarted = true;
             super.start();
@@ -45,19 +46,19 @@ public class AutoElevate extends Command {
 
     @Override
     protected void execute() {
-        if (!hasTouched && elev.moveBottomAuto(dir)) {
+        if (!hasTouched && belev.moveBottomAuto(dir)) {
         //boolean touch = !(dir > 0 ? elev.getOverSwitch() :
         //    elev.getUnderSwitch());
         //if (!hasTouched && touch) {
             hasTouched = true;
-            cd = DiscElevator.BOTTOM_STOP_LOOPS;
+            cd = Belevator.BOTTOM_STOP_LOOPS;
         }
         if (cd > 0) {
             System.out.println(cd);
-            elev.moveBottomAuto(-dir);
+            belev.moveBottomAuto(-dir);
             cd--;
         } else if (hasTouched) {
-            elev.move(0, 0);
+            belev.moveStop();
             done = true;
         }
     }
@@ -72,7 +73,7 @@ public class AutoElevate extends Command {
     protected void end() {
         System.out.println("ae end");
         isStarted = false;
-        elev.move(0, 0);
+        belev.moveStop();
     }
 
     @Override

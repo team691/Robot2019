@@ -34,19 +34,13 @@ Command-based robot code for FRC 2019.
   lowers by release motor for 1 sec.
 * Move first stage up/down with buttons __5/3__.
 * Move second stage up/down with buttons __6/4__.
+* Auto-move first stage to top/bottom
+  with POV __up/down__.
 * Open and shut grabber with __trigger__.
 * Tighten/loosen the release motor with
   buttons __9/11__.
 * Automatically close grabber and lift with
-  release motor for 1.15 sec with button __12__.
-
-### Arm Controls (DEFUNCT)
-* Stick- and button-operated by Extreme3D.
-* Move lower part with __Y-axis__.
-* Move upper part with __POV up/down__.
-* Move arm elevator up/down with __POV right/left__.
-* Calibrate arm encoder positions with button
-  __7__ or __calibrateArm__ in SmartDashboard.
+  release motor for 1.32 sec with button __12__.
 
 ## Hardware
 USB Webcam expected.
@@ -71,13 +65,3 @@ DoubleSolenoid at PCM ports 0, 1.
 |:----------------- |:-----:|
 | Over              | 0     |
 | Under             | 1     |
-
-### Arm (DISCONNECTED)
-* DoubleSolenoid at PCM ports 2, 3.
-* SparkMax with encoder at CAN ID 1.
-* Arm motors unknown.
-
-| Encoder   | DIOs  |
-|:--------- |:-----:|
-| Lower     | 1, 2  |
-| Upper     | 3, 4  |

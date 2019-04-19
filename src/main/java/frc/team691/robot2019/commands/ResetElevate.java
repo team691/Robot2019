@@ -1,10 +1,10 @@
 package frc.team691.robot2019.commands;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
-import frc.team691.robot2019.subsystems.DiscElevator;
+import frc.team691.robot2019.subsystems.Melevator;
 
 public class ResetElevate extends TimedCommand {
-    private DiscElevator elev = DiscElevator.getInstance();
+    private Melevator elev = Melevator.getInstance();
 
     public ResetElevate(double time) {
         super(time);
@@ -14,7 +14,7 @@ public class ResetElevate extends TimedCommand {
     @Override
     protected void initialize() {
         System.out.println("re initialize");
-        elev.setHand(DiscElevator.HAND_SHUT);
+        elev.setHand(Melevator.HAND_SHUT);
     }
 
     @Override

@@ -5,37 +5,28 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team691.robot2019.OI;
-import frc.team691.robot2019.subsystems.DiscElevator;
+import frc.team691.robot2019.subsystems.Melevator;
 
-public class StickElevate extends Command {
+public class StickMelev extends Command {
     private static final int STICK_PORT = 1; // X3D
     private static final int BUTTON_EMODE       = 10;
     private static final int BUTTON_RELEASE_FW  = 9;
     private static final int BUTTON_RELEASE_BW  = 11;
     private static final int BUTTON_GRAB        = 1;
-    private static final int BUTTON_BOTTOM_DOWN = 3;
-    private static final int BUTTON_BOTTOM_UP   = 5;
     private static final int BUTTON_SIDE_DOWN   = 4;
     private static final int BUTTON_SIDE_UP     = 6;
     private static final int BUTTON_RESET_GRAB  = 12;
-    private static final int POV_AUTO_UP        = 0;
-    private static final int POV_AUTO_DOWN      = 180;
     private static final double RELEASE_TIME_SEC = 1.2;
 
     private OI oi               = OI.getInstance();
-    private DiscElevator elev   = DiscElevator.getInstance();
-    private AutoElevate aeCommand = new AutoElevate();
+    private Melevator elev   = Melevator.getInstance();
     private ResetElevate resetCommand =
         new ResetElevate(RELEASE_TIME_SEC + 0.12);
 
     private boolean needAutoInit = true;
-    private boolean usp, osp;
-    private int rd, bud, bdd, sdd;
+    private int rd, sdd;
 
-    public StickElevate() {
-        SmartDashboard.putNumber("aeDir", 1);
-        SmartDashboard.putData(aeCommand);
-
+    public StickMelev() {
         SmartDashboard.putBoolean("isElev",
             SmartDashboard.getBoolean("isElev", true));
         requires(elev);
@@ -43,10 +34,10 @@ public class StickElevate extends Command {
 
     @Override
     protected void initialize() {
-        System.out.println("se initialize");
+        System.out.println("sm initialize");
         if (RobotState.isAutonomous() && needAutoInit) {
             rd = (int) (RELEASE_TIME_SEC / 0.02);
-            elev.setHand(DiscElevator.HAND_OPEN);
+            elev.setHand(Melevator.HAND_OPEN);
         }
         needAutoInit = RobotState.isOperatorControl();
     }
@@ -55,38 +46,21 @@ public class StickElevate extends Command {
     protected void execute() {
         elev.moveReleaseDir(rd > 0 ? -1 : 0);
         if (rd > 0) rd--;
-        aeCommand.setDir((int) SmartDashboard.getNumber("aeDir", 0));
 
         Joystick stick = oi.getStick(STICK_PORT);
         //if (stick == null || !SmartDashboard.getBoolean("isElev", true)) {
         if (stick == null) {
-            elev.move(0, 0);
+            elev.move(0);
             return;
         }
 
         elev.moveFixed(
-            stick.getRawButton(BUTTON_BOTTOM_UP) || bdd > 0,
-            stick.getRawButton(BUTTON_BOTTOM_DOWN) || bud > 0,
             stick.getRawButton(BUTTON_SIDE_UP) || sdd > 0,
-            stick.getRawButton(BUTTON_SIDE_DOWN), true
+            stick.getRawButton(BUTTON_SIDE_DOWN)
         );
-        boolean us = !elev.getUnderSwitch();
-        boolean os = !elev.getOverSwitch();
-        if (bud > 0) bud--;
-        if (stick.getRawButtonReleased(BUTTON_BOTTOM_UP) ||
-            (usp && !us)) {
-            bud = DiscElevator.BOTTOM_STOP_LOOPS;
-        }
-        if (bdd > 0) bdd--;
-        if (stick.getRawButtonReleased(BUTTON_BOTTOM_DOWN) ||
-            (osp && !os)) {
-            bdd = DiscElevator.BOTTOM_STOP_LOOPS;
-        }
-        usp = us;
-        osp = os;
         if (sdd > 0) sdd--;
         if (stick.getRawButtonReleased(BUTTON_SIDE_DOWN)) {
-            sdd = DiscElevator.SIDE_STOP_LOOPS;
+            sdd = Melevator.SIDE_STOP_LOOPS;
         }
 
         if (stick.getRawButtonPressed(BUTTON_GRAB)) {
@@ -103,13 +77,6 @@ public class StickElevate extends Command {
             resetCommand.start();
         }
 
-        // TODO: Implement, use AutoElevate correctly
-        int pov = stick.getPOV(0);
-        if (pov == POV_AUTO_UP || pov == POV_AUTO_DOWN) {
-            aeCommand.start(pov == POV_AUTO_UP ? 1 : -1);
-            return;
-        }
-
         if (stick.getRawButtonPressed(BUTTON_EMODE)) {
             SmartDashboard.putBoolean("isElev",
                 !SmartDashboard.getBoolean("isElev", false));
@@ -123,13 +90,13 @@ public class StickElevate extends Command {
 
     @Override
     protected void end() {
-        System.out.println("se end");
+        System.out.println("sm end");
         elev.moveStop();
     }
 
     @Override
     protected void interrupted() {
-        System.out.println("se interrupted");
+        System.out.println("sm interrupted");
         end();
     }
 }
